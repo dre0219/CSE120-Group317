@@ -4,8 +4,10 @@ from re import S
 from flask import Flask, request, jsonify, render_template, url_for, current_app, g
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/places', methods=['GET', 'POST'])
 def places():
@@ -45,6 +47,31 @@ def get_db_connect():
     except sqlite3.error as e:
         print(e)
     return connection
+
+@app.route('/shape_querying', methods=['GET', 'POST'])
+def shape_querying():
+    if request.method == 'POST':
+        coordinfo = request.form['data']
+        # connection = get_db_connect()
+        # cursor = connection.cursor()
+
+        # cursor.execute('''
+        # SELECT *
+        # FROM businesses2
+        # WHERE latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?
+        # ''', (coordinfo[0], coordinfo[1], coordinfo[2], coordinfo[3]))
+        # # latitude of rectangle is less than the top left y (latitude decreases southward from positive value in northern hemisphere), 
+        # # and greater than bottom right's y (going northwards increases latitude)
+        # # longitude of rectangle is less than the bottom right's x (longitude increases eastward from negative value in western hemisphere)
+        # # and greater than top left's x (longitude decreases westward in western hemisphere)
+        # places = [[]]
+        # for row in cursor.fetchall():
+        #     print(str(row[1]) + ", " + str(row[2]) + ", " + str(row[3]) + ", " + str(row[4]) + ", " + str(row[5]) + ", " + str(row[6]))
+        #     places.append([str(row[1]),str(row[2]),str(row[3]),str(row[4])])
+        
+        print(coordinfo)
+        return ""
+    return ""
 
 @app.route('/<name>')
 def print_name(name):
@@ -101,4 +128,4 @@ def singleplace(id):
         return "Place w/ id: {} has been deleted".format(id), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

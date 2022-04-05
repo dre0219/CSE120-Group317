@@ -167,19 +167,31 @@ function initMap(){
   // Store map coordinates for polygons
   // read this for tomorrow https://stackoverflow.com/questions/32899213/getting-coordinates-of-rectangle-polygon-when-drawn-on-google-maps-with-drawing/32902755
   google.maps.event.addListener(drawMgr, 'overlaycomplete', function(overlay) {
-  alert("Created Box!");
+  //alert("Created Box!");
 
-  rectangle = overlay;
-  drawMgr.setOptions({
-    drawingMode: null,
-    drawingControl: false
-  });
-  var bounds = overlay.overlay.getBounds();
-  var start = bounds.getNorthEast();
-  var end = bounds.getSouthWest();
+    rectangle = overlay;
+    drawMgr.setOptions({
+      drawingMode: null,
+      drawingControl: false
+    });
+    var bounds = overlay.overlay.getBounds();
+    var start = bounds.getNorthEast();
+    var end = bounds.getSouthWest();
 
-  console.log(start.toUrlValue());
-  console.log(end.toUrlValue())
+    var testcoord = start.toJSON(); 
+    var testcoord2 = end.toJSON();
+    const data = {testcoord, testcoord2};
+    
+    console.log(test);
+
+    var test = {'name': "jowi" }
+    $.ajax({
+      type: 'POST',
+      url: "/shape_querying",
+      data: {
+        'data': JSON.stringify(data)
+      }
+    })
   });
 }
 
