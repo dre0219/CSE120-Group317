@@ -51,25 +51,39 @@ def get_db_connect():
 @app.route('/shape_querying', methods=['GET', 'POST'])
 def shape_querying():
     if request.method == 'POST':
-        coordinfo = request.form['data']
-        # connection = get_db_connect()
-        # cursor = connection.cursor()
+        #data = request.form['data']
+        #print(data)
+        data2 = request.form.to_dict()
+        print(data2)
+        print(data2['testcoordNE[lat]'])
+        print(data2['testcoordNE[lng]'])
+        print(data2['testcoordSW[lat]'])
+        print(data2['testcoordSW[lng]'])
+
+        connection = get_db_connect()
+        cursor = connection.cursor()
 
         # cursor.execute('''
         # SELECT *
         # FROM businesses2
         # WHERE latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?
         # ''', (coordinfo[0], coordinfo[1], coordinfo[2], coordinfo[3]))
+
+        cursor.execute('''
+        SELECT *
+        FROM businesses2
+        WHERE latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?
+        ''', (data2['testcoordNE[lat]'], data2['testcoordSW[lat]'], data2['testcoordSW[lng]'], data2['testcoordNE[lng]']))
+
         # # latitude of rectangle is less than the top left y (latitude decreases southward from positive value in northern hemisphere), 
         # # and greater than bottom right's y (going northwards increases latitude)
         # # longitude of rectangle is less than the bottom right's x (longitude increases eastward from negative value in western hemisphere)
         # # and greater than top left's x (longitude decreases westward in western hemisphere)
-        # places = [[]]
-        # for row in cursor.fetchall():
-        #     print(str(row[1]) + ", " + str(row[2]) + ", " + str(row[3]) + ", " + str(row[4]) + ", " + str(row[5]) + ", " + str(row[6]))
-        #     places.append([str(row[1]),str(row[2]),str(row[3]),str(row[4])])
+        places = [[]]
+        for row in cursor.fetchall():
+            print(str(row[1]) + ", " + str(row[2]) + ", " + str(row[3]) + ", " + str(row[4]) + ", " + str(row[5]) + ", " + str(row[6]))
+            places.append([str(row[1]),str(row[2]),str(row[3]),str(row[4])])
         
-        print(coordinfo)
         return ""
     return ""
 
