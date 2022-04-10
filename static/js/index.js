@@ -142,7 +142,7 @@ function initMap(){
     all_overlays.push(e);
     if (e.type != google.maps.drawing.OverlayType.MARKER) {
       // Switch back to non-drawing mode after drawing a shape.
-      drawMgr.setDrawingMode(null);
+
 
       // Add an event listener that selects the newly-drawn shape when the user
       // mouses down on it.
@@ -178,9 +178,9 @@ function initMap(){
     var start = bounds.getNorthEast();
     var end = bounds.getSouthWest();
 
-    var testcoord = start.toJSON(); 
-    var testcoord2 = end.toJSON();
-    const data = {testcoord, testcoord2};
+    const testcoordNE = start.toJSON(); 
+    const testcoordSW = end.toJSON();
+    const data = {testcoordNE, testcoordSW};
     
     console.log(test);
 
@@ -189,8 +189,10 @@ function initMap(){
       type: 'POST',
       url: "/shape_querying",
       data: {
-        'data': JSON.stringify(data)
-      }
+        //'data': JSON.stringify(data),
+        'testcoordNE': testcoordNE,
+        'testcoordSW': testcoordSW
+      },
     })
   });
 }
