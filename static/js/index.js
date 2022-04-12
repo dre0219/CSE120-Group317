@@ -142,7 +142,7 @@ function initMap(){
     all_overlays.push(e);
     if (e.type != google.maps.drawing.OverlayType.MARKER) {
       // Switch back to non-drawing mode after drawing a shape.
-      drawMgr.setDrawingMode(null);
+
 
       // Add an event listener that selects the newly-drawn shape when the user
       // mouses down on it.

@@ -6,6 +6,10 @@ from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
+# Variables to be used
+ShapeQuery = []
+
+
 app = Flask(__name__)
 CORS(app)
 
@@ -35,10 +39,10 @@ def places():
         return f"Place w/ id: {cursor.lastrowid} created successfully"
 
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index 3.html')
+
 
 def get_db_connect():
     connection = None
@@ -47,6 +51,7 @@ def get_db_connect():
     except sqlite3.error as e:
         print(e)
     return connection
+
 
 @app.route('/shape_querying', methods=['GET', 'POST'])
 def shape_querying():
@@ -86,6 +91,13 @@ def shape_querying():
         
         return ""
     return ""
+
+
+def db_to_json(arr): 
+    list_dict =[]
+    for i in range(0,len(arr)): 
+        list_dict[i]= {'Name':arr[i][1], 'Address': arr[i][2]}
+        
 
 @app.route('/<name>')
 def print_name(name):
@@ -141,5 +153,12 @@ def singleplace(id):
         connection.commit()
         return "Place w/ id: {} has been deleted".format(id), 200
 
+
+@app.route('/test/data')
+def data():
+    return {'data':[{'name': 'Jowi', 'age':100000, 'address': 'Earth', 'phone': 9120132210, "email": 'jasaras@asdas.com'}]}
+
+
+
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
