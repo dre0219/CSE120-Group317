@@ -158,23 +158,27 @@ def singleplace(id):
 def data():
     return {'data':[{'name': 'Jowi', 'age':100000, 'address': 'Earth', 'phone': 9120132210, "email": 'jasaras@asdas.com'}]}
 
-@app.route('/save', methods=['POST'])
-def add_area_to_db():
-    data = request.form.to_dict()
-    print(data)
+@app.route('/save/data', methods=['POST'])
+def add_area_to_db(data):
     connection = get_db_connect()
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO businesses2 (name, address, city, postal_code, latitude, longitude) VALUES (?,?,?,?,?,?)", (data['name'], data['address'], data['city'], data['postal_code'], data['latitude'], data['longitude']))
+    latitude1 = data['testcoordNE[lat]']    #assign to latitude1
+    longitude1 = data['testcoordNE[lng]']   #assign to longitude1
+    latitude2 = data['testcoordSW[lat]']    #assign to latitude2
+    longitude2 = data['testcoordSW[lng]']   #assign to longitude2
+    cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
+                    ''', (area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
+    area_id += 1
+    composite_id += 1
     connection.commit()
-    return "Place w/ id: {} created successfully".format(cursor.lastrowid)
 
 @app.route('/delete/<int:id>', methods=['DELETE'])
 def delete_area_from_db(id):
     connection = get_db_connect()
     cursor = connection.cursor()
-    cursor.execute("DELETE FROM businesses2 WHERE business_id = ?", (id,))
+    cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
     connection.commit()
-    return "Place w/ id: {} has been deleted".format(id), 200
+    connection.commit()
 
 
 
