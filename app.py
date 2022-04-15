@@ -9,6 +9,25 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/data', methods=['GET', 'POST'])
+def data():
+    con = get_db_connect()
+    cur = con.cursor()
+    datas = {'data':[]}
+    cur.execute('SELECT * FROM businesses2')
+    for row in cur.fetchall():
+        output = {
+            'name': row[1],
+            'address': row[2],
+            'city': row[3],
+            'postal_code': row[4],
+            'latitude': row[5],
+            'longitude': row[6]
+        }
+        datas['data'].append(output)
+    
+    return datas
+
 @app.route('/places', methods=['GET', 'POST'])
 def places():
     connection = get_db_connect()
