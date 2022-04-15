@@ -178,7 +178,6 @@ def delete_area_from_db(id):
     cursor = connection.cursor()
     cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
     connection.commit()
-    connection.commit()
 
 
 
