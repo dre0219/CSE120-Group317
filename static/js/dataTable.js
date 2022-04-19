@@ -1,13 +1,25 @@
+var table;
+
 $(document).ready(function () {
-    $('#data').DataTable({
-        ajax: '/test/data',
-        serverSide: true,
-        columns: [
-          {data: 'name'},
-          {data: 'age'},
-          {data: 'address', orderable: false},
-          {data: 'phone', orderable: false},
-          {data: 'email'}
-        ],
-      });
-    });
+
+  table = $('#tables').DataTable({
+    columns: [
+    {data: 'name'}
+  ],
+});
+});
+
+
+
+
+
+function refreshTable(){
+  table.destroy();
+  table = $('#datas').DataTable({
+    ajax: {type: 'GET',
+          url:'/test/tables'},
+    columns: [
+    {'data': 'name'}
+    ],
+  });
+}
