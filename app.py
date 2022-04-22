@@ -77,6 +77,14 @@ def save_composite_to_db(composite_id, name):
         connection.commit()
     return ""
 
+def load_areas_from_composite(composite_id):
+    connection = get_db_connect()
+    cursor = connection.cursor()
+    cursor.execute('''pragma foreign_keys = ON''')
+    connection.commit()
+    cursor.execute('''SELECT * FROM AREAS WHERE composite_id = ?''', (composite_id, name, composite_id))
+    connection.commit()
+
 @app.route('/delete/<int:id>', methods=['DELETE'])
 def delete_area_from_db(id):
     connection = get_db_connect()
@@ -86,7 +94,7 @@ def delete_area_from_db(id):
 
 
 def access_most_recent_area():
-    print("most recent")
+    print("most recent composite")
     connection = get_db_connect()
     cursor = connection.cursor()
     cursor.execute('''SELECT * FROM areas WHERE area_id = (SELECT MAX(area_id) FROM areas)''')
@@ -94,7 +102,16 @@ def access_most_recent_area():
     # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
     print(area)
     return area
-    
+
+def access_most_recent_composite():
+    print("most recent composite")
+    connection = get_db_connect()
+    cursor = connection.cursor()
+    cursor.execute('''SELECT * FROM composites WHERE composite_id = (SELECT MAX(composite_id) FROM composites)''')
+    composites = cursor.fetchone()
+    # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
+    print(composites)
+    return composites    
 
 def shape_querying(latestcoords):
     connection = get_db_connect()
