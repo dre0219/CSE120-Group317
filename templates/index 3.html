@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>My Google Map</title>
+  <style>
+    #map{
+      height:500px;
+      width:100%;
+    }
+    
+  </style>
+</head>
+<body>
+  <h1>Veracruz Ventures Mapper</h1>
+  <div id="map">
+
+  <script src = "{{url_for('static', filename='js/jquery-3.6.0.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/index.js')}}"></script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3pdNizaMap5LPe40WPIp_kIMIIOy70OY&amp;callback=initMap&amp;v=weekly&libraries=drawing" async="">
+    </script>
+  </div>
+
+  <div>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/r-2.2.9/sc-2.0.5/sb-1.3.2/sp-2.0.0/sr-1.1.0/datatables.min.css"/>
+ 
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/r-2.2.9/sc-2.0.5/sb-1.3.2/sp-2.0.0/sr-1.1.0/datatables.min.js"></script>
+  <script src="{{url_for('static', filename='js/dataTable.js')}}"></script>
+
+  <button onclick="refreshTable()" class="button-56" role="button">Load </button> 
+  
+  <script src="http://maps.google.com/maps/api/js?libraries=drawing&key=AIzaSyA3pdNizaMap5LPe40WPIp_kIMIIOy70OY"></script>
+  <div>
+    <button id="delete-button">Delete Selected Shape</button>
+    <button id="delete-all-button">Delete All Shapes</button>
+  </div>
+</div>
+<div id="map"></div>
+
+
+  <table id="datas" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  </div>
+</body>
+</html>
