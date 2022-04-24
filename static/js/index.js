@@ -1,4 +1,3 @@
-// http://jsfiddle.net/Behseini/p5mJw/3/ for reference
 
 function initMap(){
 
