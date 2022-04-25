@@ -23,3 +23,7 @@ function refreshTable(){
     ],
   });
 }
+
+function deleteEntry(){
+  // Ajax call to delete entry
+}

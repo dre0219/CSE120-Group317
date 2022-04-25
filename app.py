@@ -1,8 +1,10 @@
 from contextlib import redirect_stderr
 from curses import tparm
+from operator import length_hint
 import sqlite3
 from ast import Slice
 from re import S
+from turtle import shape
 from flask import Flask, request, jsonify, render_template, url_for, current_app, g, redirect
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
@@ -19,6 +21,8 @@ CORS(app)
 
 area_id = 0 
 coordinates = []
+coordinate_array=[]
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     connection = get_db_connect()
@@ -59,9 +63,8 @@ def save_area_to_db():
         # composite_id += 0
         # connection.commit()
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
-        print(coordinates)
+        coordinate_array.append(coordinates)
     return ""
-
 
 
 @app.route('/delete/<int:id>', methods=['DELETE'])
@@ -105,41 +108,48 @@ def shape_querying(latestcoords):
     #     places.append([str(row[1]),str(row[2]),str(row[3]),str(row[4])])
     
     output_data = cursor.fetchall()
-    print(output_data)
-
 
     print(">>>>>> Shape Querying Functions")
     return output_data
 
 
 def dict_factory(cursor, row):
-    return dict((cursor.description[idx][0], value)
-                for idx, value in enumerate(row))
+    """ Converts row_factory function to output dictionaries instead of tuples
 
-    
+    Args:
+        cursor (_type_): Database Cursor
+        row (_type_): Row of database
 
-# @app.route('/test/tables/', methods = ['POST', 'GET'])
-# def tables():
-#     global coordinates
-#     if request.method == 'POST':
-#         data_to_send = shape_querying(coordinates)
-#         print(data_to_send)
-#         # DataParser = parser.parse_args()
-#         print(">>>>>> Sending data backk to datatable")
-#         return jsonify({'data':data_to_send})
+    Returns:
+        dict: returns a dictionary of values with column names as keys
+    """
+    return dict((cursor.description[idx][0], value) for idx, value in enumerate(row))
 
-
+   
 @app.route('/test/tables', methods = ['POST', 'GET'])
 def tables():
+    """ Function that sends output of search_querying of the composite area to the DataTable
+
+    Returns:
+        dict/json: Returns the data from shape_querying as a readable json file
+    """
     global coordinates
-    data_to_send = shape_querying(coordinates)
-    print(data_to_send)
+    global coordinate_array
+    print(coordinate_array)
+    # data_to_send = shape_querying(coordinates)
+    data_to_send =composite_logic(coordinate_array)
+
     return {"data": data_to_send}
 
-# @app.route('/test/tables')
-# def data():
-#     return {'data':[{'name': 'Jowi', 'age':100000, 'address': 'Earth', 'phone': 9120132210, "email": 'jasaras@asdas.com'}]}
-
+def composite_logic(coord_array):
+    data_to_send = []
+    for i in coord_array:
+        datas = shape_querying(i)
+        print(datas)
+        for j in datas:
+            data_to_send.append(j)
+    return data_to_send
+        
 
 if __name__ == "__main__":
     app.run(debug=True)
