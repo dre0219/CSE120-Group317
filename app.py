@@ -47,24 +47,48 @@ def save_area_to_db():
     global area_id
     global coordinates
     if request.method == 'POST':
-        data2 = request.form.to_dict()
-        # connection = get_db_connect()
-        # cursor = connection.cursor()
-        # cursor.execute('''pragma foreign_keys = ON''')
-        # connection.commit()
-        latitude1 = data2['testcoordNE[lat]']    #assign to latitude1
-        longitude1 = data2['testcoordNE[lng]']   #assign to longitude1
-        latitude2 = data2['testcoordSW[lat]']    #assign to latitude2
-        longitude2 = data2['testcoordSW[lng]']   #assign to longitude2
-        # composite_id = 0
+        data = request.form.to_dict()
+        connection = get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute('''pragma foreign_keys = ON''')
+        connection.commit()
+        latitude1 = data['testcoordNE[lat]']    #assign to latitude1
+        longitude1 = data['testcoordNE[lng]']   #assign to longitude1
+        latitude2 = data['testcoordSW[lat]']    #assign to latitude2
+        longitude2 = data['testcoordSW[lng]']   #assign to longitude2
+        composite_id = 0
         # cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
         #                 ''', (area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
-        # area_id += 0
-        # composite_id += 0
-        # connection.commit()
+        area_id += 1
+        composite_id += 0
+        connection.commit()
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         coordinate_array.append(coordinates)
     return ""
+
+@app.route('/save', methods=['POST'])
+def save_composite_to_db(composite_id, name):
+    print("saving to db")
+    if request.method == 'POST':
+        data = request.form.to_dict()
+        connection = get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute('''pragma foreign_keys = ON''')
+        connection.commit()
+        cursor.execute('''INSERT INTO composites(composite_id, composite_name, user_id) VALUES(?,?,?)
+                         ''', (composite_id, name, 0))
+        composite_id += 1
+        connection.commit()
+    return ""
+
+def load_areas_from_composite(composite_id):
+    connection = get_db_connect()
+    cursor = connection.cursor()
+    cursor.execute('''pragma foreign_keys = ON''')
+    connection.commit()
+    cursor.execute('''SELECT * FROM AREAS WHERE composite_id = ?''', (composite_id))
+    output_data = cursor.fetchall()
+    return output_data
 
 
 @app.route('/delete/<int:id>', methods=['DELETE'])
@@ -74,9 +98,15 @@ def delete_area_from_db(id):
     cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
     connection.commit()
 
+def delete_composites_from_db(id):
+    connection = get_db_connect()
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM composites WHERE composites_id = ?", (id,))
+    connection.commit()
+
 
 def access_most_recent_area():
-    print("most recent")
+    print("most recent composite")
     connection = get_db_connect()
     cursor = connection.cursor()
     cursor.execute('''SELECT * FROM areas WHERE area_id = (SELECT MAX(area_id) FROM areas)''')
@@ -84,7 +114,16 @@ def access_most_recent_area():
     # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
     print(area)
     return area
-    
+
+def access_most_recent_composite():
+    print("most recent composite")
+    connection = get_db_connect()
+    cursor = connection.cursor()
+    cursor.execute('''SELECT * FROM composites WHERE composite_id = (SELECT MAX(composite_id) FROM composites)''')
+    composites = cursor.fetchone()
+    # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
+    print(composites)
+    return composites    
 
 def shape_querying(latestcoords):
     connection = get_db_connect()
@@ -94,7 +133,7 @@ def shape_querying(latestcoords):
 
     cursor.execute('''
     SELECT *
-    FROM businesses2
+    FROM businesses
     WHERE latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?
     ''', (latestcoords["lat1"],latestcoords["lat2"], latestcoords["long2"], latestcoords["long1"]))
 
@@ -146,10 +185,10 @@ def composite_logic(coord_array):
     for i in coord_array:
         datas = shape_querying(i)
         print(datas)
-        for j in range(len(datas)):
-            if datas[j] not in data_to_send:
-                data_to_send.append(datas[j])
+        for j in datas:
+            data_to_send.append(j)
     return data_to_send
         
+
 if __name__ == "__main__":
     app.run(debug=True)
