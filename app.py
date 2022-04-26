@@ -146,10 +146,10 @@ def composite_logic(coord_array):
     for i in coord_array:
         datas = shape_querying(i)
         print(datas)
-        for j in datas:
-            data_to_send.append(j)
+        for j in range(len(datas)):
+            if datas[j] not in data_to_send:
+                data_to_send.append(datas[j])
     return data_to_send
         
-
 if __name__ == "__main__":
     app.run(debug=True)
