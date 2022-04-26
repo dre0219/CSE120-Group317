@@ -43,7 +43,7 @@ function initMap(){
   // Map options
   options = {
     zoom:7,
-    center:{lat:42.3601,lng:-71.0589}
+    center:{lat:37.775,lng:-122.462}
   }
 
   // Initializing new map
@@ -170,10 +170,7 @@ function initMap(){
   //alert("Created Box!");
 
     rectangle = overlay;
-    drawMgr.setOptions({
-      drawingMode: null,
-      drawingControl: false
-    });
+
     var bounds = overlay.overlay.getBounds();
     var start = bounds.getNorthEast();
     var end = bounds.getSouthWest();
@@ -187,7 +184,7 @@ function initMap(){
     var test = {'name': "jowi" }
     $.ajax({
       type: 'POST',
-      url: "/shape_querying",
+      url: "/save",
       data: {
         //'data': JSON.stringify(data),
         'testcoordNE': testcoordNE,
