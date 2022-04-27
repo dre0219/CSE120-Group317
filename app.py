@@ -1,8 +1,10 @@
 from contextlib import redirect_stderr
 from curses import tparm
+from operator import length_hint
 import sqlite3
 from ast import Slice
 from re import S
+from turtle import shape
 from flask import Flask, request, jsonify, render_template, url_for, current_app, g, redirect
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
@@ -19,6 +21,8 @@ CORS(app)
 
 area_id = 0 
 coordinates = []
+coordinate_array=[]
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     connection = get_db_connect()
@@ -43,47 +47,25 @@ def save_area_to_db():
     global area_id
     global coordinates
     if request.method == 'POST':
-        data = request.form.to_dict()
-        connection = get_db_connect()
-        cursor = connection.cursor()
-        cursor.execute('''pragma foreign_keys = ON''')
-        connection.commit()
-        latitude1 = data['testcoordNE[lat]']    #assign to latitude1
-        longitude1 = data['testcoordNE[lng]']   #assign to longitude1
-        latitude2 = data['testcoordSW[lat]']    #assign to latitude2
-        longitude2 = data['testcoordSW[lng]']   #assign to longitude2
-        composite_id = 0
+        data2 = request.form.to_dict()
+        # connection = get_db_connect()
+        # cursor = connection.cursor()
+        # cursor.execute('''pragma foreign_keys = ON''')
+        # connection.commit()
+        latitude1 = data2['testcoordNE[lat]']    #assign to latitude1
+        longitude1 = data2['testcoordNE[lng]']   #assign to longitude1
+        latitude2 = data2['testcoordSW[lat]']    #assign to latitude2
+        longitude2 = data2['testcoordSW[lng]']   #assign to longitude2
+        # composite_id = 0
         # cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
         #                 ''', (area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
-        area_id += 1
-        composite_id += 0
-        connection.commit()
+        # area_id += 0
+        # composite_id += 0
+        # connection.commit()
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
-        print(coordinates)
+        coordinate_array.append(coordinates)
     return ""
 
-@app.route('/save', methods=['POST'])
-def save_composite_to_db(composite_id, name):
-    print("saving to db")
-    if request.method == 'POST':
-        data = request.form.to_dict()
-        connection = get_db_connect()
-        cursor = connection.cursor()
-        cursor.execute('''pragma foreign_keys = ON''')
-        connection.commit()
-        cursor.execute('''INSERT INTO areas(composite_id, composite_name, user_id) VALUES(?,?,?)
-                         ''', (composite_id, name, composite_id))
-        composite_id += 1
-        connection.commit()
-    return ""
-
-def load_areas_from_composite(composite_id):
-    connection = get_db_connect()
-    cursor = connection.cursor()
-    cursor.execute('''pragma foreign_keys = ON''')
-    connection.commit()
-    cursor.execute('''SELECT * FROM AREAS WHERE composite_id = ?''', (composite_id, name, composite_id))
-    connection.commit()
 
 @app.route('/delete/<int:id>', methods=['DELETE'])
 def delete_area_from_db(id):
@@ -94,7 +76,7 @@ def delete_area_from_db(id):
 
 
 def access_most_recent_area():
-    print("most recent composite")
+    print("most recent")
     connection = get_db_connect()
     cursor = connection.cursor()
     cursor.execute('''SELECT * FROM areas WHERE area_id = (SELECT MAX(area_id) FROM areas)''')
@@ -102,16 +84,7 @@ def access_most_recent_area():
     # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
     print(area)
     return area
-
-def access_most_recent_composite():
-    print("most recent composite")
-    connection = get_db_connect()
-    cursor = connection.cursor()
-    cursor.execute('''SELECT * FROM composites WHERE composite_id = (SELECT MAX(composite_id) FROM composites)''')
-    composites = cursor.fetchone()
-    # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
-    print(composites)
-    return composites    
+    
 
 def shape_querying(latestcoords):
     connection = get_db_connect()
@@ -121,7 +94,7 @@ def shape_querying(latestcoords):
 
     cursor.execute('''
     SELECT *
-    FROM businesses
+    FROM businesses2
     WHERE latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?
     ''', (latestcoords["lat1"],latestcoords["lat2"], latestcoords["long2"], latestcoords["long1"]))
 
@@ -135,41 +108,48 @@ def shape_querying(latestcoords):
     #     places.append([str(row[1]),str(row[2]),str(row[3]),str(row[4])])
     
     output_data = cursor.fetchall()
-    print(output_data)
-
 
     print(">>>>>> Shape Querying Functions")
     return output_data
 
 
 def dict_factory(cursor, row):
-    return dict((cursor.description[idx][0], value)
-                for idx, value in enumerate(row))
+    """ Converts row_factory function to output dictionaries instead of tuples
 
-    
+    Args:
+        cursor (_type_): Database Cursor
+        row (_type_): Row of database
 
-# @app.route('/test/tables/', methods = ['POST', 'GET'])
-# def tables():
-#     global coordinates
-#     if request.method == 'POST':
-#         data_to_send = shape_querying(coordinates)
-#         print(data_to_send)
-#         # DataParser = parser.parse_args()
-#         print(">>>>>> Sending data backk to datatable")
-#         return jsonify({'data':data_to_send})
+    Returns:
+        dict: returns a dictionary of values with column names as keys
+    """
+    return dict((cursor.description[idx][0], value) for idx, value in enumerate(row))
 
-
+   
 @app.route('/test/tables', methods = ['POST', 'GET'])
 def tables():
+    """ Function that sends output of search_querying of the composite area to the DataTable
+
+    Returns:
+        dict/json: Returns the data from shape_querying as a readable json file
+    """
     global coordinates
-    data_to_send = shape_querying(coordinates)
-    print(data_to_send)
+    global coordinate_array
+    print(coordinate_array)
+    # data_to_send = shape_querying(coordinates)
+    data_to_send =composite_logic(coordinate_array)
+
     return {"data": data_to_send}
 
-# @app.route('/test/tables')
-# def data():
-#     return {'data':[{'name': 'Jowi', 'age':100000, 'address': 'Earth', 'phone': 9120132210, "email": 'jasaras@asdas.com'}]}
-
+def composite_logic(coord_array):
+    data_to_send = []
+    for i in coord_array:
+        datas = shape_querying(i)
+        print(datas)
+        for j in datas:
+            data_to_send.append(j)
+    return data_to_send
+        
 
 if __name__ == "__main__":
     app.run(debug=True)
