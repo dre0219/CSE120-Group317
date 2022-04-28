@@ -1,5 +1,3 @@
-// http://jsfiddle.net/Behseini/p5mJw/3/ for reference
-
 function initMap(){
 
   // Initializing variables to be used
@@ -22,8 +20,23 @@ function initMap(){
     clearSelection();
     selectedShape = shape;
     shape.setEditable(true);
-    
+
   }
+
+  function refreshTable(){
+    table.destroy();
+    table = $('#datas').DataTable({
+      ajax: {type: 'GET',
+            url:'/test/tables'},
+      columns: [
+      //{'data': 'address' },
+      {'data': 'name'},
+      {'data': 'address'}
+      ],
+    });
+  }  
+
+
 
   function deleteSelectedShape() {
     if (selectedShape) {
@@ -38,105 +51,7 @@ function initMap(){
     all_overlays = [];
   }
 
-
-
-  // Map options
-  options = {
-    zoom:10,
-    center:{lat:37.775,lng:-122.462}
-  }
-
-  // Initializing new map
-  map = new google.maps.Map(document.getElementById('map'), options);
-
-  // Listen for click and add marker 
-  google.maps.event.addListener(map, 'click', function(event){
-    // Add marker
-    addMarker({coords:event.latLng});
-  });
-
-
-
-  /*
-  // Add marker
-  var marker = new google.maps.Marker({
-    position:{lat:42.4668,lng:-70.9495},
-    map:map,
-    icon:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-  });
-
-  var infoWindow = new google.maps.InfoWindow({
-    content:'<h1>Lynn MA</h1>'
-  });
-
-  marker.addListener('click', function(){
-    infoWindow.open(map, marker);
-  });
-  */
-
-  // Array of markers
-  markers = [
-    {
-      coords:{lat:42.4668,lng:-70.9495},
-      iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-      content:'<h1>Lynn MA</h1>'
-    },
-    {
-      coords:{lat:42.8584,lng:-70.9300},
-      content:'<h1>Amesbury MA</h1>'
-    },
-    {
-      coords:{lat:42.7762,lng:-71.0773}
-    }
-  ];
-
-  // Loop through markers
-  for(var i = 0;i < markers.length;i++){
-    // Add marker
-    addMarker(markers[i]);
-  }
-
-  // Add Marker Function
-  function addMarker(props){
-    var marker = new google.maps.Marker({
-      position:props.coords,
-      map:map,
-      //icon:props.iconImage
-    });
-
-    // Check for customicon
-    if(props.iconImage){
-      // Set icon image
-      marker.setIcon(props.iconImage);
-    }
-
-    // Check content
-    if(props.content){
-      var infoWindow = new google.maps.InfoWindow({
-        content:props.content
-      });
-
-      marker.addListener('click', function(){
-        infoWindow.open(map, marker);
-      });
-    }
-  }
-
-  const drawMgr = new google.maps.drawing.DrawingManager({
-      drawingMode: google.maps.drawing.OverlayType.MARKET,
-      drawingControl: true,
-      drawingControlOptions: {
-        position: google.maps.ControlPosition.TOP_CENTER,
-        drawingModes: [
-          google.maps.drawing.OverlayType.MARKER,
-          google.maps.drawing.OverlayType.RECTANGLE,
-          google.maps.drawing.OverlayType.POLYLINE,
-        ],
-      },
-      polygonOptions: {editable: true}
-  })
   
-  function initialize() {
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 10,
       center: new google.maps.LatLng(37.7694, -122.4862), //37.7694° N, 122.4862° W
@@ -165,6 +80,7 @@ function initMap(){
       polygonOptions: polyOptions,
       map: map
     });
+    
   
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
       all_overlays.push(e);
@@ -189,10 +105,8 @@ function initMap(){
     google.maps.event.addListener(map, 'click', clearSelection);
     google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
     google.maps.event.addDomListener(document.getElementById('delete-all-button'), 'click', deleteAllShape);
-  
-    buildColorPalette();
+    google.maps.event.addDomListener(document.getElementById('load'), 'click', refreshTable);
   }
-  google.maps.event.addDomListener(window, 'load', initialize);
 
   drawMgr.setMap(map);
 
@@ -250,5 +164,3 @@ function initMap(){
       },
     })
   });
-};
-
