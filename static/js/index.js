@@ -23,18 +23,6 @@ function initMap(){
 
   }
 
-  function refreshTable(){
-    table.destroy();
-    table = $('#datas').DataTable({
-      ajax: {type: 'GET',
-            url:'/test/tables'},
-      columns: [
-      //{'data': 'address' },
-      {'data': 'name'},
-      {'data': 'address'}
-      ],
-    });
-  }  
 
 
 
@@ -80,7 +68,7 @@ function initMap(){
       polygonOptions: polyOptions,
       map: map
     });
-    
+
   
     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
       all_overlays.push(e);
@@ -106,9 +94,7 @@ function initMap(){
     google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
     google.maps.event.addDomListener(document.getElementById('delete-all-button'), 'click', deleteAllShape);
     google.maps.event.addDomListener(document.getElementById('load'), 'click', refreshTable);
-  }
-
-  drawMgr.setMap(map);
+  };
 
   google.maps.event.addListener(drawMgr, 'overlaycomplete', function(e) {
     all_overlays.push(e);
