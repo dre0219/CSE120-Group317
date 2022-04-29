@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Veracruz Ventures Mapper</title>
+
+  <link rel="stylesheet" type="text/css" href="static/css/main.css">
+</head>
+
+<body>
+  <h1>Veracruz Ventures Mapper</h1>
+
+  <div class="topnav"><a href="/contact">Contact Us</a> <a class="active" href="/">Map</a> </div>
+
+  <div id="map">
+    <script src="{{url_for('static', filename='js/jquery-3.6.0.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/index.js')}}"></script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRzt-BfyKqrRlG8Es2bAtztnrjffPntUM&amp;callback=initMap&amp;v=weekly&libraries=drawing"
+      async="">
+      </script>
+  </div>
+
+  <div>
+    <!-- Icons reference list found at https://www.w3schools.com/icons/icons_reference.asp -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+      href="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/r-2.2.9/sc-2.0.5/sb-1.3.2/sp-2.0.0/sr-1.1.0/datatables.min.css" />
+    <script type="text/javascript"
+      src="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/r-2.2.9/sc-2.0.5/sb-1.3.2/sp-2.0.0/sr-1.1.0/datatables.min.js"></script>
+    <script src="{{url_for('static', filename='js/dataTable.js')}}"></script>
+
+    <button onclick="refreshTable()" class="button"> <i class="material-icons">refresh</i>
+      <span class="button-text">Refresh</span> </button>
+
+    <table id="datas" class="cell-border compact stripe hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</body>
+
+</html>
