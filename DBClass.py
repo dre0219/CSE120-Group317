@@ -44,8 +44,9 @@ class DBClass():
         data_to_send = []
         for i in self.coordinate_array:
             datas = self.shape_querying(i)
-            for j in datas:
-                data_to_send.append(j)
+            for j in str(len(datas)):
+               if datas[j] not in data_to_send:
+                   data_to_send.append(datas[j])
         return data_to_send
     
     
