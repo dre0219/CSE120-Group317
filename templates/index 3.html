@@ -15,8 +15,8 @@
 </head>
 <body>
   <h1>Veracruz Ventures Mapper</h1>
-  <div id="map">
 
+  <div id="map">
   <script src = "{{url_for('static', filename='js/jquery-3.6.0.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/index.js')}}"></script>
   <script async defer
@@ -31,6 +31,11 @@
   <script src="{{url_for('static', filename='js/dataTable.js')}}"></script>
 
   <button onclick="refreshTable()" class="button-56" role="button">Refresh  </button>
+  <button id="delete-button">Delete Selected Shape</button>
+  <button id="delete-all-button">Delete All Shapes</button>
+  </div>
+ 
+
   <table id="datas" class="table table-striped">
     <thead>
       <tr>

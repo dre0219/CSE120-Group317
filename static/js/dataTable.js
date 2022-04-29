@@ -19,7 +19,6 @@ function refreshTable(){
     ajax: {type: 'GET',
           url:'/test/tables'},
     columns: [
-    //{'data': 'address' },
     {'data': 'name'},
     {'data': 'address'}
     ],
