@@ -143,10 +143,7 @@ class DBClass():
         # # and greater than bottom right's y (going northwards increases latitude)
         # # longitude of rectangle is less than the bottom right's x (longitude increases eastward from negative value in western hemisphere)
         # # and greater than top left's x (longitude decreases westward in western hemisphere)
-        places = [[]]
-        # for row in cursor.fetchall():
-        #     print(str(row[1]) + ", " + str(row[2]) + ", " + str(row[3]) + ", " + str(row[4]) + ", " + str(row[5]) + ", " + str(row[6]))
-        #     places.append([str(row[1]),str(row[2]),str(row[3]),str(row[4])])
+
         
         output_data = cursor.fetchall()
 
