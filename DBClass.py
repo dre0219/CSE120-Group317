@@ -5,8 +5,9 @@ class DBClass():
         self.coordinates = []
         self.coordinate_array=[]
         
-        self.area_id = self.access_most_recent_area()
-        self.composite_id = self.access_most_recent_composite()
+        self.area_id = self.access_most_recent_area()[0]
+        self.composite_id = self.access_most_recent_composite()[0]
+        print(str(self.area_id) + " " + str(self.composite_id))
                
     def get_db_connect(self):
         """ Attempts to create a connection to the database
@@ -52,20 +53,19 @@ class DBClass():
     
     def save_area_to_db(self, data2):
         print("saving to db")
-        # connection = get_db_connect()
-        # cursor = connection.cursor()
-        # cursor.execute('''pragma foreign_keys = ON''')
-        # connection.commit()
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute('''pragma foreign_keys = ON''')
+        connection.commit()
         latitude1 = data2['testcoordNE[lat]']    #assign to latitude1
         longitude1 = data2['testcoordNE[lng]']   #assign to longitude1
         latitude2 = data2['testcoordSW[lat]']    #assign to latitude2
         longitude2 = data2['testcoordSW[lng]']   #assign to longitude2
-        # composite_id = 0
-        # cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
-        #                 ''', (area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
-        # area_id += 0
-        # composite_id += 0
-        # connection.commit()
+        composite_id = 0
+        self.area_id += 1
+        cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
+                        ''', (self.area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
+        connection.commit()
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         self.coordinate_array.append(coordinates)
         return ""
@@ -77,6 +77,9 @@ class DBClass():
         cursor = connection.cursor()
         cursor.execute('''SELECT * FROM composites WHERE composite_id = (SELECT MAX(composite_id) FROM composites)''')
         composites = cursor.fetchone()
+        if composites == None:
+            print("No searches yet")
+            return 0
         print(composites)
         return composites    
     
@@ -89,6 +92,10 @@ class DBClass():
         area = cursor.fetchone()
         # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
         print(area)
+        if area == None:
+            print("No areas yet")
+            return 0
+        print("Accessed most recent area")
         return area
     
     
