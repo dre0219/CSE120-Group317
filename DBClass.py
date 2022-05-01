@@ -61,7 +61,7 @@ class DBClass():
         longitude1 = data2['testcoordNE[lng]']   #assign to longitude1
         latitude2 = data2['testcoordSW[lat]']    #assign to latitude2
         longitude2 = data2['testcoordSW[lng]']   #assign to longitude2
-        composite_id = 0
+        composite_id = 1
         self.area_id += 1
         cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
                         ''', (self.area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
@@ -104,7 +104,7 @@ class DBClass():
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        cursor.execute('''SELECT * FROM AREAS WHERE composite_id = ?''', (composite_id))
+        cursor.execute('''SELECT * FROM areas WHERE composite_id = ?''', (composite_id,))
         output_data = cursor.fetchall()
         return output_data
 
@@ -119,7 +119,9 @@ class DBClass():
     def delete_composites_from_db(self, id):
         connection = self.get_db_connect()
         cursor = connection.cursor()
-        cursor.execute("DELETE FROM composites WHERE composites_id = ?", (id,))
+        cursor.execute("DELETE FROM areas WHERE composite_id = ?", (id,))
+        connection.commit()
+        cursor.execute("DELETE FROM composites WHERE composite_id = ?", (id,))
         connection.commit()
 
         
