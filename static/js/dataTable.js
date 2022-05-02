@@ -18,10 +18,17 @@ function refreshTable(){
     "autoWidth": false,
     ajax: {type: 'GET',
           url:'/test/tables'},
-    columns: [
-    {'data': 'name'},
-    {'data': 'address'}
-    ],
+          "aoColumns": [{
+            "mData": 'name'
+          }, {
+            "mData": 'address'
+          }, {
+            "mData": null,
+            "bSortable": false,
+            "mRender": function(data, type, full) {
+              return '<a class="btn btn-info btn-sm" href=#/' + full[0] + '>' + 'Button' + '</a>';
+            }
+          }]
   });
 }
 
