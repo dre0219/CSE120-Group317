@@ -1,27 +1,45 @@
-var table;
+var resulttable;
+var searchtable;
 
 $(document).ready(function () {
-
-  table = $('#tables').DataTable({
+  resulttable = $('#datas').DataTable({
     columns: [
-    {data: 'name'}
+    {'data': 'name'},
+    {'data': 'address'}
   ],
+  });
+  searchtable = $('#searches').DataTable({
+    ajax: {type: 'GET',
+          url:'/test/searchtables'},
+    columns: [
+    {'data': 'composite_id'},
+    {'data': 'composite_name'},
+    {'data': 'user_id'}
+  ],
+  });
 });
-});
-
-
-
-
 
 function refreshTable(){
-  table.destroy();
-  table = $('#datas').DataTable({
+  resulttable.destroy();
+  resulttable = $('#datas').DataTable({
     ajax: {type: 'GET',
           url:'/test/tables'},
     columns: [
-    //{'data': 'address' },
     {'data': 'name'},
     {'data': 'address'}
+    ],
+  });
+}
+
+function refreshSearchTable(){
+  searchtable.destroy();
+  searchtable = $('#searches').DataTable({
+    ajax: {type: 'GET',
+          url:'/test/searchtables'},
+    columns: [
+    {'data': 'composite_id'},
+    {'data': 'composite_name'},
+    {'data': 'user_id'}
     ],
   });
 }

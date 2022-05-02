@@ -80,6 +80,24 @@ function initMap(){
         // mouses down on it.
         var newShape = e.overlay;
         newShape.type = e.type;
+
+
+        var bounds = e.overlay.getBounds();
+        var start = bounds.getNorthEast();
+        var end = bounds.getSouthWest();
+
+        const testcoordNE = start.toJSON(); 
+        const testcoordSW = end.toJSON();
+
+        $.ajax({
+          type: 'POST',
+          url: "/save",
+          data: {
+          //'data': JSON.stringify(data),
+          'testcoordNE': testcoordNE,
+          'testcoordSW': testcoordSW
+          },
+        })
         google.maps.event.addListener(newShape, 'click', function() {
           setSelection(newShape);
         });
@@ -93,27 +111,9 @@ function initMap(){
     google.maps.event.addListener(map, 'click', clearSelection);
     google.maps.event.addDomListener(document.getElementById('delete-button'), 'click', deleteSelectedShape);
     google.maps.event.addDomListener(document.getElementById('delete-all-button'), 'click', deleteAllShape);
-    google.maps.event.addDomListener(document.getElementById('load'), 'click', refreshTable);
+
   };
 
-  google.maps.event.addListener(drawMgr, 'overlaycomplete', function(e) {
-    all_overlays.push(e);
-    if (e.type != google.maps.drawing.OverlayType.MARKER) {
-      // Switch back to non-drawing mode after drawing a shape.
-
-
-      // Add an event listener that selects the newly-drawn shape when the user
-      // mouses down on it.
-      var newShape = e.overlay;
-      newShape.type = e.type;
-      google.maps.event.addListener(newShape, 'click', function() {
-        setSelection(newShape);
-      });
-      setSelection(newShape);
-    }
-  });
-  // Switch back to non-drawing mode after drawing a shape.
-  drawMgr.setDrawingMode(null);
 
   // Listen for click and add marker 
   google.maps.event.addListener(map, 'click', function(event){
@@ -124,29 +124,29 @@ function initMap(){
 
   // Store map coordinates for polygons
   // read this for tomorrow https://stackoverflow.com/questions/32899213/getting-coordinates-of-rectangle-polygon-when-drawn-on-google-maps-with-drawing/32902755
-  google.maps.event.addListener(drawMgr, 'overlaycomplete', function(overlay) {
-  //alert("Created Box!");
+  // google.maps.event.addListener(drawMgr, 'overlaycomplete', function(overlay) {
+  // //alert("Created Box!");
 
-    rectangle = overlay;
+  //   // rectangle = overlay;
 
-    var bounds = overlay.overlay.getBounds();
-    var start = bounds.getNorthEast();
-    var end = bounds.getSouthWest();
+  //   // var bounds = overlay.overlay.getBounds();
+  //   // var start = bounds.getNorthEast();
+  //   // var end = bounds.getSouthWest();
 
-    const testcoordNE = start.toJSON(); 
-    const testcoordSW = end.toJSON();
-    const data = {testcoordNE, testcoordSW};
+  //   // const testcoordNE = start.toJSON(); 
+    // const testcoordSW = end.toJSON();
+    // const data = {testcoordNE, testcoordSW};
     
-    console.log(test);
+    // console.log(test);
 
-    var test = {'name': "jowi" }
-    $.ajax({
-      type: 'POST',
-      url: "/save",
-      data: {
-        //'data': JSON.stringify(data),
-        'testcoordNE': testcoordNE,
-        'testcoordSW': testcoordSW
-      },
-    })
-  });
+    // var test = {'name': "jowi" }
+    // $.ajax({
+    //   type: 'POST',
+    //   url: "/save",
+    //   data: {
+    //     //'data': JSON.stringify(data),
+    //     'testcoordNE': testcoordNE,
+    //     'testcoordSW': testcoordSW
+  //   //   },
+  //   // })
+  // });
