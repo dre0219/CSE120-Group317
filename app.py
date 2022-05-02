@@ -47,6 +47,11 @@ def tables():
     data_to_send = dbc.composite_logic()
     return {"data": data_to_send}
 
+@app.route('/test/searchtables', methods = ['POST', 'GET'])
+def searchtables():
+    print("Search table setup")
+    data_to_send = dbc.load_composites_from_user(0)
+    return {"data": data_to_send}
 
    
 if __name__ == "__main__":
