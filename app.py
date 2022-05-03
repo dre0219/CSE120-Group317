@@ -35,14 +35,10 @@ def load_areas_from_db(id):
 @app.route('/delete/<int:id>', methods=['DELETE'])
 def delete_composites_from_db(id):
     dbc.delete_composites_from_db(id)
-<<<<<<< HEAD
-=======
 
 @app.route('/deleteallshapes', methods=['DELETE'])
 def delete_all_shapes():
     dbc.delete_all_areas_from_db()
-    dbc.coordinate_array = []
->>>>>>> 95b84aa142ba99d7baa996d0f3c779044a83abef
 
 
 @app.route('/test/tables', methods = ['POST', 'GET'])
