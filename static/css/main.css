@@ -56,17 +56,26 @@ h1 {
   font-size: 36px;
 }
 
+.material-icons.small {
+  font-size: 20px;
+}
+
 .button {
   border: none;
   background-color: #4a6762;
   color: white;
-  padding: 12px 16px;
+  padding: 8px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 6px 4px;
   cursor: pointer;
+}
+
+.button.small {
+  padding: 2px 6px;
+  margin: 0px;
 }
 
 .button:hover {
@@ -75,6 +84,12 @@ h1 {
 
 .button-text {
   vertical-align: middle;
+}
+
+.table-caption {
+  position: relative;
+  left: 45%;
+  font-size: 30px;
 }
 
 /* Styling for info section */

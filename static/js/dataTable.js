@@ -4,7 +4,7 @@ var searchtable;
 $(document).ready(function () {
   resulttable = $('#datas').DataTable({
     "language": {
-      "emptyTable": "To get started, draw an area/areas and click refresh"
+      "emptyTable": "To get started, draw a rectangle/rectangles on the map and click refresh"
     },
     columns: [
       { data: 'name' },
@@ -16,32 +16,27 @@ $(document).ready(function () {
       type: 'GET',
       url: '/test/searchtables'
     },
+    "autoWidth": false,
     columns: [
       { 'data': 'composite_id' },
       { 'data': 'composite_name' },
       { 'data': 'user_id' }
-    ],
+    ]
   });
 });
 
 function refreshTable() {
   resulttable.destroy();
   resulttable = $('#datas').DataTable({
-    "autoWidth": false,
     ajax: {
       type: 'GET',
       url: '/test/tables'
     },
-    "aoColumns": [
-      { "mData": 'name' },
-      { "mData": 'address' },
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function (data, type, full) {
-          return '<a class="btn btn-info btn-sm" href=#/' + full[0] + '>' + 'Button' + '</a>';
-        }
-      }]
+    "autoWidth": false,
+    columns: [
+      { 'data': 'name' },
+      { 'data': 'address' }
+    ]
   });
 }
 
@@ -52,12 +47,25 @@ function refreshSearchTable() {
       type: 'GET',
       url: '/test/searchtables'
     },
+    "autoWidth": false,
+    "columnDefs": [
+      { "width": "6%", "targets": 3 }],
     columns: [
       { 'data': 'composite_id' },
       { 'data': 'composite_name' },
-      { 'data': 'user_id' }
-    ],
+      { 'data': 'user_id' },
+      {
+        'data': null,
+        orderable: false,
+        "render": function (data, type, full) {
+          return '<div> <button onclick="hi()" class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </div>';
+        }
+      }
+    ]
   });
+}
+function hi(){
+  alert("Hi");
 }
 
 function deleteEntry() {

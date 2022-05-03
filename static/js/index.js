@@ -62,7 +62,7 @@ function initMap(){
     // Creates a drawing manager attached to the map that allows the user to draw
     // markers, lines, and shapes.
     drawingManager = new google.maps.drawing.DrawingManager({
-      drawingMode: google.maps.drawing.OverlayType.POLYGON,
+      drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
       markerOptions: {
         draggable: true
       },

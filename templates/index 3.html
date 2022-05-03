@@ -34,7 +34,9 @@
     <script src="{{url_for('static', filename='js/dataTable.js')}}"></script>
 
     <button onclick="refreshTable()" class="button"> <i class="material-icons">refresh</i>
-      <span class="button-text">Refresh</span> </button>
+      <span class="button-text">Refresh Results Table</span> </button>
+    <button onclick="refreshSearchTable()" class="button"> <i class="material-icons">file_download</i>
+      <span class="button-text">Save to Searches Table</span> </button>
     <button id="delete-button" class="button"> <i class="material-icons">delete</i>
       <span class="button-text">Delete Selected Shape</span> </button>
     <button id="delete-all-button" class="button"> <i class="material-icons">delete_sweep</i>
@@ -42,6 +44,7 @@
   </div>
 
   <div>
+    <caption><span class="table-caption">Search Results</span></caption>
     <table id="datas" class="cell-border compact stripe hover">
       <thead>
         <tr>
@@ -53,12 +56,14 @@
   </div>
 
   <div>
+    <caption><span class="table-caption">Saved Results</span></caption>
     <table id="searches" class="cell-border compact stripe hover">
       <thead>
         <tr>
           <th>Search ID</th>
           <th>Search Name</th>
           <th>User ID</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
