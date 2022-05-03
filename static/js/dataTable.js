@@ -17,10 +17,19 @@ $(document).ready(function () {
       url: '/test/searchtables'
     },
     "autoWidth": false,
+    "columnDefs": [
+      { "width": "6%", "targets": 3 }],
     columns: [
       { 'data': 'composite_id' },
       { 'data': 'composite_name' },
-      { 'data': 'user_id' }
+      { 'data': 'user_id' },
+      {
+        'data': null,
+        orderable: false,
+        "render": function (data, type, full) {
+          return '<div> <button onclick="hi()" class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </div>';
+        }
+      }
     ]
   });
 });

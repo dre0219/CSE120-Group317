@@ -14,7 +14,7 @@ class DBClass():
         if new_composite != 0:
             self.composite_id = new_composite[0]
         #print(str(self.area_id) + " " + str(self.composite_id))
-
+               
     def get_db_connect(self):
         """ Attempts to create a connection to the database
 
@@ -54,11 +54,13 @@ class DBClass():
                 if datas[j] not in data_to_send:
                     data_to_send.append(datas[j])
         return data_to_send
-
+    
     def search_placement(self):
 
         data_to_send = []
 
+
+    
     def save_area_to_db(self, data2):
         print("saving to db")
         connection = self.get_db_connect()
@@ -106,14 +108,13 @@ class DBClass():
             return 0
         print("Accessed most recent area")
         return area
-
+    
     def load_areas_from_composite(self, composite_id):
         connection = self.get_db_connect()
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        cursor.execute(
-            '''SELECT * FROM areas WHERE composite_id = ?''', (composite_id,))
+        cursor.execute('''SELECT * FROM areas WHERE composite_id = ?''', (composite_id,))
         output_data = cursor.fetchall()
         return output_data
 
@@ -123,8 +124,7 @@ class DBClass():
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        cursor.execute(
-            '''SELECT * FROM composites WHERE user_id = ?''', (user_id,))
+        cursor.execute('''SELECT * FROM composites WHERE user_id = ?''', (user_id,))
         output_data = cursor.fetchall()
         print(output_data)
         return output_data
@@ -135,6 +135,14 @@ class DBClass():
         cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
         connection.commit()
 
+
+    def delete_all_areas_from_db(self):
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM areas WHERE composite_id = ?", (self.composite_id,))
+        connection.commit()
+    
+    
     def delete_composites_from_db(self, id):
         connection = self.get_db_connect()
         cursor = connection.cursor()
