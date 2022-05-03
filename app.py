@@ -36,6 +36,10 @@ def load_areas_from_db(id):
 def delete_composites_from_db(id):
     dbc.delete_composites_from_db(id)
 
+@app.route('/deleteallshapes', methods=['DELETE'])
+def delete_all_shapes():
+    dbc.delete_all_areas_from_db()
+
 
 @app.route('/test/tables', methods = ['POST', 'GET'])
 def tables():
@@ -47,6 +51,11 @@ def tables():
     data_to_send = dbc.composite_logic()
     return {"data": data_to_send}
 
+@app.route('/test/searchtables', methods = ['POST', 'GET'])
+def searchtables():
+    print("Search table setup")
+    data_to_send = dbc.load_composites_from_user(0)
+    return {"data": data_to_send}
 
    
 if __name__ == "__main__":
