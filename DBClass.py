@@ -17,6 +17,7 @@ class DBClass():
 
     def get_db_connect(self):
         """ Attempts to create a connection to the database
+
         Returns:
             sqlite3 connection: returns the sqlite connection or none if error
         """
@@ -30,9 +31,11 @@ class DBClass():
 
     def dict_factory(self, cursor, row):
         """ Converts row_factory function to output dictionaries instead of tuples
+
         Args:
             cursor (_type_):s Database Cursor
             row (_type_): Row of database
+
         Returns:
             dict: returns a dictionary of values with column names as keys
         """
@@ -40,6 +43,7 @@ class DBClass():
 
     def composite_logic(self):
         """ Logic function that uses the shape_querying function to find POI in composite areas
+
         Returns:
             list: list of data to be displayed on datatable
         """
@@ -129,13 +133,6 @@ class DBClass():
         connection = self.get_db_connect()
         cursor = connection.cursor()
         cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
-        connection.commit()
-
-    def delete_all_areas_from_db(self):
-        connection = self.get_db_connect()
-        cursor = connection.cursor()
-        cursor.execute("DELETE FROM areas WHERE composite_id = ?",
-                       (self.composite_id,))
         connection.commit()
 
     def delete_composites_from_db(self, id):
