@@ -133,6 +133,13 @@ class DBClass():
         cursor = connection.cursor()
         cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
         connection.commit()
+
+
+    def delete_all_areas_from_db(self):
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM areas WHERE composite_id = ?", (self.composite_id,))
+        connection.commit()
     
     
     def delete_composites_from_db(self, id):
