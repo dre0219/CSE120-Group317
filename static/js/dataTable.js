@@ -57,7 +57,7 @@ function refreshSearchTable() {
       {
         'data': null,
         orderable: false,
-        "render": function (data, type, full) {
+        "render": function (data, type, full) { // return string is html format
           return '<div> <button onclick="hi()" class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </div>';
         }
       }
