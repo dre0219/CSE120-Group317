@@ -37,6 +37,12 @@ function initMap(){
       all_overlays[i].overlay.setMap(null);
     }
     all_overlays = [];
+  
+  /*  
+    $.ajax({
+      type: 'DELETE',
+      url: "/deleteallshapes",
+    })*/
   }
 
   

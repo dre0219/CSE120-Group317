@@ -16,7 +16,8 @@ dbc = DBClass()
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index 3.html')
-    
+
+
 @app.route('/contact')
 def ex():
     return render_template('contact.html')
@@ -40,19 +41,27 @@ def load_areas_from_db(id):
 def delete_composites_from_db(id):
     dbc.delete_composites_from_db(id)
 
+@app.route('/deleteallshapes', methods=['DELETE'])
+def delete_all_shapes():
+    dbc.delete_all_areas_from_db()
+    dbc.coordinate_array = []
+
 
 @app.route('/test/tables', methods = ['POST', 'GET'])
 def tables():
     """ Function that sends output of search_querying of the composite area to the DataTable
-
     Returns:
         dict/json: Returns the data from shape_querying as a readable json file
     """
     data_to_send = dbc.composite_logic()
     return {"data": data_to_send}
 
+@app.route('/test/searchtables', methods = ['POST', 'GET'])
+def searchtables():
+    print("Search table setup")
+    data_to_send = dbc.load_composites_from_user(0)
+    return {"data": data_to_send}
 
    
 if __name__ == "__main__":
     app.run(debug=True)
-    
