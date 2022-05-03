@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 from curses import tparm
 from operator import length_hint
 from flask import Flask, request, jsonify, render_template, url_for, current_app, g, redirect
@@ -58,6 +59,8 @@ if __name__ == "__main__":
     app.run(debug=True)
     
 =======
+=======
+>>>>>>> 95b84aa142ba99d7baa996d0f3c779044a83abef
 from contextlib import redirect_stderr
 import sqlite3
 from ast import Slice
@@ -93,4 +96,7 @@ if __name__ == "__main__":
 
 
 
+<<<<<<< HEAD
 >>>>>>> 79020d0d76897e70bb5b1bf44f832da20f1451ef
+=======
+>>>>>>> 95b84aa142ba99d7baa996d0f3c779044a83abef

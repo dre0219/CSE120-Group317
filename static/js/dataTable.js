@@ -32,7 +32,10 @@ function refreshTable(){
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 95b84aa142ba99d7baa996d0f3c779044a83abef
 function refreshSearchTable(){
   searchtable.destroy();
   searchtable = $('#searches').DataTable({
@@ -46,7 +49,10 @@ function refreshSearchTable(){
   });
 }
 
+<<<<<<< HEAD
 >>>>>>> 79020d0d76897e70bb5b1bf44f832da20f1451ef
+=======
+>>>>>>> 95b84aa142ba99d7baa996d0f3c779044a83abef
 function deleteEntry(){
   // Ajax call to delete entry
 }

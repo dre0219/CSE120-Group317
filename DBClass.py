@@ -4,9 +4,20 @@ class DBClass():
     def __init__(self):
         self.coordinates = []
         self.coordinate_array=[]
+<<<<<<< HEAD
         
         self.area_id = self.access_most_recent_area()[0]
         self.composite_id = self.access_most_recent_composite()[0]
+=======
+        self.area_id = 0
+        self.composite_id = 0
+        new_area = self.access_most_recent_area()
+        if new_area != 0:
+            self.area_id = new_area[0]
+        new_composite = self.access_most_recent_composite()
+        if new_composite != 0:
+            self.composite_id = new_composite[0]
+>>>>>>> 95b84aa142ba99d7baa996d0f3c779044a83abef
         #print(str(self.area_id) + " " + str(self.composite_id))
                
     def get_db_connect(self):
@@ -128,6 +139,16 @@ class DBClass():
         cursor = connection.cursor()
         cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
         connection.commit()
+<<<<<<< HEAD
+=======
+
+
+    def delete_all_areas_from_db(self):
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM areas WHERE composite_id = ?", (self.composite_id,))
+        connection.commit()
+>>>>>>> 95b84aa142ba99d7baa996d0f3c779044a83abef
     
     
     def delete_composites_from_db(self, id):
