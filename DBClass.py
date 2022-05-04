@@ -1,9 +1,10 @@
 import sqlite3
 
+
 class DBClass():
     def __init__(self):
         self.coordinates = []
-        self.coordinate_array=[]
+        self.coordinate_array = []
         self.area_id = 0
         self.composite_id = 0
         new_area = self.access_most_recent_area()
@@ -22,12 +23,12 @@ class DBClass():
         """
         connection = None
         try:
-            connection = sqlite3.connect("sf_food_program_db_project_ver.sqlite")
+            connection = sqlite3.connect(
+                "sf_food_program_db_project_ver.sqlite")
         except sqlite3.error as e:
             print(e)
         return connection
-    
-    
+
     def dict_factory(self, cursor, row):
         """ Converts row_factory function to output dictionaries instead of tuples
 
@@ -39,8 +40,7 @@ class DBClass():
             dict: returns a dictionary of values with column names as keys
         """
         return dict((cursor.description[idx][0], value) for idx, value in enumerate(row))
-    
-    
+
     def composite_logic(self):
         """ Logic function that uses the shape_querying function to find POI in composite areas
 
@@ -67,40 +67,41 @@ class DBClass():
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        latitude1 = data2['testcoordNE[lat]']    #assign to latitude1
-        longitude1 = data2['testcoordNE[lng]']   #assign to longitude1
-        latitude2 = data2['testcoordSW[lat]']    #assign to latitude2
-        longitude2 = data2['testcoordSW[lng]']   #assign to longitude2
+        latitude1 = data2['testcoordNE[lat]']  # assign to latitude1
+        longitude1 = data2['testcoordNE[lng]']  # assign to longitude1
+        latitude2 = data2['testcoordSW[lat]']  # assign to latitude2
+        longitude2 = data2['testcoordSW[lng]']  # assign to longitude2
         composite_id = 0
         self.area_id += 1
         cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
                         ''', (self.area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
         connection.commit()
-        coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
+        coordinates = {"lat1": latitude1, "long1": longitude1,
+                       "lat2": latitude2, "long2": longitude2}
         self.coordinate_array.append(coordinates)
         return ""
-    
-    
+
     def access_most_recent_composite(self):
         print("most recent composite")
         connection = self.get_db_connect()
         cursor = connection.cursor()
-        cursor.execute('''SELECT * FROM composites WHERE composite_id = (SELECT MAX(composite_id) FROM composites)''')
+        cursor.execute(
+            '''SELECT * FROM composites WHERE composite_id = (SELECT MAX(composite_id) FROM composites)''')
         composites = cursor.fetchone()
         if composites == None:
             print("No searches yet")
             return 0
-        #print(composites)
-        return composites    
-    
-    
+        # print(composites)
+        return composites
+
     def access_most_recent_area(self):
         print("most recent area")
         connection = self.get_db_connect()
         cursor = connection.cursor()
-        cursor.execute('''SELECT * FROM areas WHERE area_id = (SELECT MAX(area_id) FROM areas)''')
+        cursor.execute(
+            '''SELECT * FROM areas WHERE area_id = (SELECT MAX(area_id) FROM areas)''')
         area = cursor.fetchone()
-        # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
+        # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5])
         print(area)
         if area == None:
             print("No areas yet")
@@ -150,7 +151,6 @@ class DBClass():
         cursor.execute("DELETE FROM composites WHERE composite_id = ?", (id,))
         connection.commit()
 
-        
     def save_composite_to_db(self, composite_id, name):
         print("saving to db")
         connection = self.get_db_connect()
@@ -161,8 +161,7 @@ class DBClass():
                         ''', (composite_id, name, 0))
         self.composite_id += 1
         connection.commit()
-        return ""    
-
+        return ""
 
     def shape_querying(self, latestcoords):
         connection = self.get_db_connect()
@@ -173,14 +172,13 @@ class DBClass():
         SELECT *
         FROM businesses
         WHERE latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?
-        ''', (latestcoords["lat1"],latestcoords["lat2"], latestcoords["long2"], latestcoords["long1"]))
+        ''', (latestcoords["lat1"], latestcoords["lat2"], latestcoords["long2"], latestcoords["long1"]))
 
-        # # latitude of rectangle is less than the top left y (latitude decreases southward from positive value in northern hemisphere), 
+        # # latitude of rectangle is less than the top left y (latitude decreases southward from positive value in northern hemisphere),
         # # and greater than bottom right's y (going northwards increases latitude)
         # # longitude of rectangle is less than the bottom right's x (longitude increases eastward from negative value in western hemisphere)
         # # and greater than top left's x (longitude decreases westward in western hemisphere)
 
-        
         output_data = cursor.fetchall()
         print(output_data)
 
