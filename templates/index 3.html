@@ -16,44 +16,11 @@
 <body>
   <h1>Veracruz Ventures Mapper</h1>
 
-
-  <form id="make_checkbox_select">
-    <select name="make">
-        <option data-count="1" value="Area1">Area1</option>
-        <option data-count="2" value="Area2">Area2</option>
-        <option data-count="3" value="Area3">Area3</option>
-        <option data-count="4" value="Area4">Area4</option>
-    </select>
-    <input type="submit" />
-  </form>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-  <script>
-    $(function()
-    {
-      var mySelectCheckbox = new checkbox_select(
-      {
-        selector : "#make_checkbox_select",
-              selected_translation : "selectat",
-              all_translation : "Toate marcile",
-              not_found : "Nici unul gasit",
-  
-        // Event during initialization
-        onApply : function(e)
-        {
-                  alert("Custom Event: " + e.selected);
-        }
-      });
-    
-    });
-      
-  </script>
-
-
   <div id="map">
   <script src = "{{url_for('static', filename='js/jquery-3.6.0.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/index.js')}}"></script>
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3pdNizaMap5LPe40WPIp_kIMIIOy70OY&amp;callback=initMap&amp;v=weekly&libraries=drawing" async="">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRzt-BfyKqrRlG8Es2bAtztnrjffPntUM&amp;callback=initMap&amp;v=weekly&libraries=drawing" async="">
     </script>
   </div>
 
@@ -64,13 +31,17 @@
   <script src="{{url_for('static', filename='js/dataTable.js')}}"></script>
 
   <button onclick="refreshTable()" class="button-56" role="button">Refresh  </button>
+  <button onclick="refreshSearchTable()" class="button" role="button">Refresh Searches Table</button>
   <button id="delete-button">Delete Selected Shape</button>
   <button id="delete-all-button">Delete All Shapes</button>
-  <button onclick="TheSaveCompositeSearchFunction()" class="button-56" role="button">Save Composite Search </button>
-  <button onclick="TheNewSearchFunction()" class="button-56" role="button">Start New Search  </button>
-  </div>
- 
 
+  <form action = "{{url_for('save_composite_search')}}" method='POST'>
+    <label for="name">Name of composite</label>
+    <input type="text" name="name">
+    </input>
+    <button type="submit">Submit</button>
+</form>
+  <div>
   <table id="datas" class="table table-striped">
     <thead>
       <tr>
@@ -82,5 +53,20 @@
     </tbody>
   </table>
   </div>
+
+  <div>
+    <table id="searches" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Search ID</th>
+          <th>Search Name</th>
+          <th>User ID</th>
+        </tr>
+      </thead>
+        <tbody>
+      </tbody>
+    </table>
+    </div>
+  
 </body>
 </html>

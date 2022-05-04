@@ -16,6 +16,7 @@ function initMap(){
     }
   }
 
+
   function setSelection(shape) {
     clearSelection();
     selectedShape = shape;
@@ -24,13 +25,12 @@ function initMap(){
   }
 
 
-
-
   function deleteSelectedShape() {
     if (selectedShape) {
       selectedShape.setMap(null);
     }
   }
+
 
   function deleteAllShape() {
     for (var i = 0; i < all_overlays.length; i++) {
@@ -47,7 +47,8 @@ function initMap(){
       disableDefaultUI: true,
       zoomControl: true
     });
-  
+
+
     var polyOptions = {
       strokeWeight: 0,
       fillOpacity: 0.45,
@@ -56,16 +57,7 @@ function initMap(){
     // Creates a drawing manager attached to the map that allows the user to draw
     // markers, lines, and shapes.
     drawingManager = new google.maps.drawing.DrawingManager({
-      drawingMode: google.maps.drawing.OverlayType.POLYGON,
-      markerOptions: {
-        draggable: true
-      },
-      polylineOptions: {
-        editable: true
-      },
-      rectangleOptions: polyOptions,
-      circleOptions: polyOptions,
-      polygonOptions: polyOptions,
+      drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
       map: map
     });
 
