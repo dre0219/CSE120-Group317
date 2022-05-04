@@ -26,6 +26,9 @@ def save_area_to_db():
         dbc.save_area_to_db(data2)
     return ""
 
+@app.route('/contact')
+def ex():
+    return render_template('contact.html')
 
 @app.route('/savecomposite', methods =['POST'])
 def save_composite_search():

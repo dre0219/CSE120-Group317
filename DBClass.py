@@ -7,6 +7,14 @@ class DBClass():
         
         self.area_id = self.access_most_recent_area()[0]
         self.composite_id = self.access_most_recent_composite()[0]
+        self.area_id = 0
+        self.composite_id = 0
+        new_area = self.access_most_recent_area()
+        if new_area != 0:
+            self.area_id = new_area[0]
+        new_composite = self.access_most_recent_composite()
+        if new_composite != 0:
+            self.composite_id = new_composite[0]
         #print(str(self.area_id) + " " + str(self.composite_id))
     
     def disp_internal(self):
