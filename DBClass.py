@@ -9,12 +9,14 @@ class DBClass():
         self.composite_id = 0
         new_area = self.access_most_recent_area()
         if new_area != 0:
-            self.area_id = new_area[0]
+            self.area_id = new_area[0] + 1
         new_composite = self.access_most_recent_composite()
         if new_composite != 0:
-            self.composite_id = new_composite[0]
+            self.composite_id = new_composite[0] + 1
+            self.save_composite_to_db("temp")
+        else:
+            self.save_composite_to_db("temp")
         #print(str(self.area_id) + " " + str(self.composite_id))
-    
     def disp_internal(self):
         print("coordinates: ", self.coordinates)
         print("coordinates Array: ", self.coordinate_array)
@@ -170,13 +172,25 @@ class DBClass():
         connection.commit()
 
         
+    def rename_composite_to_db(self, name):
+        print("really renaming/updating name to db")
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute('''pragma foreign_keys = ON''')
+        connection.commit()
+        cursor.execute('''UPDATE composites SET composite_name = ? WHERE (composite_id = ? AND user_id = ?)
+                        ''', (name, self.composite_id, 0))
+        self.composite_id += 1
+        connection.commit()
+        self.save_composite_to_db("temp")
+        return ""
+
     def save_composite_to_db(self, name):
         print("saving to db")
         connection = self.get_db_connect()
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        self.composite_id += 1
         cursor.execute('''INSERT INTO composites(composite_id, composite_name, user_id) VALUES(?,?,?)
                         ''', (self.composite_id, name, 0))
         connection.commit()

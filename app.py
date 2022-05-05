@@ -38,7 +38,7 @@ def save_composite_search():
         if not name: 
             flash('name needed')
         else:   
-            dbc.save_composite_to_db(name)
+            dbc.rename_composite_to_db(name)
     return "Saved composite to DB"
 
 
