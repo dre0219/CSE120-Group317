@@ -15,6 +15,10 @@ dbc = DBClass()
 def index():
     return render_template('index 3.html')
 
+@app.route('/hi')
+def hi():
+  print ('Hi!')
+  return (''), 204
 
 @app.route('/contact')
 def ex():

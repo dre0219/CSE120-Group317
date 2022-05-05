@@ -27,7 +27,7 @@ $(document).ready(function () {
         'data': null,
         orderable: false,
         "render": function (data, type, full) {
-          return '<div> <button onclick="hi()" class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </div>';
+          return '<div> <a href="/hi"> <button class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </a> </div>';
         }
       }
     ]
@@ -67,15 +67,13 @@ function refreshSearchTable() {
         'data': null,
         orderable: false,
         "render": function (data, type, full) { // return string is html format
-          return '<div> <button onclick="hi()" class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </div>';
+          return '<div> <a href="/hi"> <button class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </a> </div>';
         }
       }
     ]
   });
 }
-function hi(){
-  alert("Hi");
-}
+
 
 function deleteEntry() {
   // Ajax call to delete entry
