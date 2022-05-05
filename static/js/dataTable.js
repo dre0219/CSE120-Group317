@@ -75,6 +75,7 @@ function hi(){
   alert("Hi");
 }
 
-function deleteEntry() {
+
+function deleteEntry(){
   // Ajax call to delete entry
 }

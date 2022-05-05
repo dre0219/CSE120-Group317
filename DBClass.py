@@ -14,7 +14,14 @@ class DBClass():
         if new_composite != 0:
             self.composite_id = new_composite[0]
         #print(str(self.area_id) + " " + str(self.composite_id))
-               
+    
+    def disp_internal(self):
+        print("coordinates: ", self.coordinates)
+        print("coordinates Array: ", self.coordinate_array)
+        print("Area ID: ", self.area_id)
+        print("Composite_ID: ", self.composite_id)
+        
+        
     def get_db_connect(self):
         """ Attempts to create a connection to the database
 
@@ -67,17 +74,15 @@ class DBClass():
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        latitude1 = data2['testcoordNE[lat]']  # assign to latitude1
-        longitude1 = data2['testcoordNE[lng]']  # assign to longitude1
-        latitude2 = data2['testcoordSW[lat]']  # assign to latitude2
-        longitude2 = data2['testcoordSW[lng]']  # assign to longitude2
-        composite_id = 0
+        latitude1 = data2['testcoordNE[lat]']    #assign to latitude1
+        longitude1 = data2['testcoordNE[lng]']   #assign to longitude1
+        latitude2 = data2['testcoordSW[lat]']    #assign to latitude2
+        longitude2 = data2['testcoordSW[lng]']   #assign to longitude2
         self.area_id += 1
         cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
-                        ''', (self.area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
+                        ''', (self.area_id, latitude1, longitude1, latitude2, longitude2, self.composite_id))
         connection.commit()
-        coordinates = {"lat1": latitude1, "long1": longitude1,
-                       "lat2": latitude2, "long2": longitude2}
+        coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         self.coordinate_array.append(coordinates)
         return ""
 
@@ -91,9 +96,10 @@ class DBClass():
         if composites == None:
             print("No searches yet")
             return 0
-        # print(composites)
-        return composites
-
+        #print(composites)
+        return composites    
+    
+    
     def access_most_recent_area(self):
         print("most recent area")
         connection = self.get_db_connect()
@@ -109,6 +115,7 @@ class DBClass():
         print("Accessed most recent area")
         return area
     
+    
     def load_areas_from_composite(self, composite_id):
         connection = self.get_db_connect()
         cursor = connection.cursor()
@@ -116,7 +123,15 @@ class DBClass():
         connection.commit()
         cursor.execute('''SELECT * FROM areas WHERE composite_id = ?''', (composite_id,))
         output_data = cursor.fetchall()
+        print(output_data)
+        
+        self.coordinate_array=[]
+        for coordinate in output_data: 
+             coordinates_to_array = {"lat1": coordinate[1], "long1": coordinate[2], "lat2": coordinate[3], "long2":coordinate[4]}
+             self.coordinate_array.append(coordinates_to_array)
+             
         return output_data
+
 
     def load_composites_from_user(self, user_id):
         connection = self.get_db_connect()
@@ -127,19 +142,22 @@ class DBClass():
         cursor.execute('''SELECT * FROM composites WHERE user_id = ?''', (user_id,))
         output_data = cursor.fetchall()
         print(output_data)
-        return output_data
 
-    def delete_area_from_db(self, id):
-        connection = self.get_db_connect()
-        cursor = connection.cursor()
-        cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
-        connection.commit()
+        return output_data
 
 
     def delete_all_areas_from_db(self):
         connection = self.get_db_connect()
         cursor = connection.cursor()
         cursor.execute("DELETE FROM areas WHERE composite_id = ?", (self.composite_id,))
+        connection.commit()
+        self.coordinate_array = []
+
+
+    def delete_area_from_db(self, id):
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM areas WHERE area_id = ?", (id,))
         connection.commit()
     
     
@@ -151,15 +169,16 @@ class DBClass():
         cursor.execute("DELETE FROM composites WHERE composite_id = ?", (id,))
         connection.commit()
 
-    def save_composite_to_db(self, composite_id, name):
+        
+    def save_composite_to_db(self, name):
         print("saving to db")
         connection = self.get_db_connect()
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        cursor.execute('''INSERT INTO composites(composite_id, composite_name, user_id) VALUES(?,?,?)
-                        ''', (composite_id, name, 0))
         self.composite_id += 1
+        cursor.execute('''INSERT INTO composites(composite_id, composite_name, user_id) VALUES(?,?,?)
+                        ''', (self.composite_id, name, 0))
         connection.commit()
         return ""
 
@@ -180,7 +199,5 @@ class DBClass():
         # # and greater than top left's x (longitude decreases westward in western hemisphere)
 
         output_data = cursor.fetchall()
-        print(output_data)
-
         print(">>>>>> Shape Querying Functions")
         return output_data

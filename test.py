@@ -20,13 +20,14 @@ def main():
     print(dbc.load_areas_from_composite(0))
     dbc.delete_area_from_db(7)
     print(dbc.load_areas_from_composite(0))
-    dbc.save_composite_to_db(1, "Test.py search")
-    print("Loading composite 1's stuff before insert " + str(dbc.load_areas_from_composite(1)))
-    dict = {'testcoordNE[lat]': '37.8', 'testcoordNE[lng]': '-122.8', 'testcoordSW[lat]': '37.0', 'testcoordSW[lng]': '-122.0'}
-    dbc.save_area_to_db(dict)
-    print("Loading composite 1's stuff after insert: " + str(dbc.load_areas_from_composite(1)))
-    dbc.delete_composites_from_db(1)
-    print("Loading composite 1's stuff after delete: " + str(dbc.load_areas_from_composite(1)))
+    dbc.disp_internal()
+    # dbc.save_composite_to_db(1, "Test.py search")
+    # print("Loading composite 1's stuff before insert " + str(dbc.load_areas_from_composite(1)))
+    # dict = {'testcoordNE[lat]': '37.8', 'testcoordNE[lng]': '-122.8', 'testcoordSW[lat]': '37.0', 'testcoordSW[lng]': '-122.0'}
+    # dbc.save_area_to_db(dict)
+    # print("Loading composite 1's stuff after insert: " + str(dbc.load_areas_from_composite(1)))
+    # dbc.delete_composites_from_db(1)
+    # print("Loading composite 1's stuff after delete: " + str(dbc.load_areas_from_composite(1)))
 
 if __name__ == "__main__":
     main()
