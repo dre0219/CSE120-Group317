@@ -70,16 +70,16 @@ class DBClass():
 
 
     
-    def save_area_to_db(self, data2):
+    def save_area_to_db(self, data):
         print("saving to db")
         connection = self.get_db_connect()
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        latitude1 = data2['testcoordNE[lat]']    #assign to latitude1
-        longitude1 = data2['testcoordNE[lng]']   #assign to longitude1
-        latitude2 = data2['testcoordSW[lat]']    #assign to latitude2
-        longitude2 = data2['testcoordSW[lng]']   #assign to longitude2
+        latitude1 = data['testcoordNE[lat]']    #assign to latitude1
+        longitude1 = data['testcoordNE[lng]']   #assign to longitude1
+        latitude2 = data['testcoordSW[lat]']    #assign to latitude2
+        longitude2 = data['testcoordSW[lng]']   #assign to longitude2
         self.area_id += 1
         cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
                         ''', (self.area_id, latitude1, longitude1, latitude2, longitude2, self.composite_id))
@@ -87,6 +87,23 @@ class DBClass():
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         self.coordinate_array.append(coordinates)
         return ""
+
+    def delete_area_from_db_coords(self, data):
+        print("saving to db")
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute('''pragma foreign_keys = ON''')
+        connection.commit()
+        latitude1 = data['testcoordNE[lat]']    #assign to latitude1
+        longitude1 = data['testcoordNE[lng]']   #assign to longitude1
+        latitude2 = data['testcoordSW[lat]']    #assign to latitude2
+        longitude2 = data['testcoordSW[lng]']   #assign to longitude2
+        cursor.execute('''DELETE FROM areas WHERE latitude1 LIKE ? AND longitude1 LIKE ? AND latitude2 LIKE ? AND longitude2 LIKE ? 
+                        AND composite_id = ?;
+                        ''', (latitude1, longitude1, latitude2, longitude2, self.composite_id))
+        connection.commit()
+        return ""
+
 
     def access_most_recent_composite(self):
         print("most recent composite")
