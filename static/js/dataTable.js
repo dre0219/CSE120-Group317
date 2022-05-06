@@ -75,6 +75,7 @@ function refreshSearchTable() {
 }
 
 
-function deleteEntry() {
+
+function deleteEntry(){
   // Ajax call to delete entry
 }
