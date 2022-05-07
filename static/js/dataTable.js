@@ -9,7 +9,9 @@ $(document).ready(function () {
     columns: [
       { data: 'name' },
       { data: 'address' }
-    ],
+    ], 
+    scrollY: "310px",
+    scrollCollapse: true
   });
   searchtable = $('#searches').DataTable({
     ajax: {
@@ -17,8 +19,7 @@ $(document).ready(function () {
       url: '/test/searchtables'
     },
     "autoWidth": false,
-    "columnDefs": [
-      { "width": "6%", "targets": 3 }],
+
     columns: [
       { 'data': 'composite_id' },
       { 'data': 'composite_name' },
@@ -30,7 +31,9 @@ $(document).ready(function () {
           return '<div> <a href="/hi"> <button class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </a> </div>';
         }
       }
-    ]
+    ], 
+    scrollY: "310px",
+    scrollCollapse: true
   });
 });
 
@@ -45,7 +48,9 @@ function refreshTable() {
     columns: [
       { 'data': 'name' },
       { 'data': 'address' }
-    ]
+    ], 
+    scrollY: "310px",
+    scrollCollapse: true
   });
 }
 
@@ -57,8 +62,7 @@ function refreshSearchTable() {
       url: '/test/searchtables'
     },
     "autoWidth": false,
-    "columnDefs": [
-      { "width": "6%", "targets": 3 }],
+
     columns: [
       { 'data': 'composite_id' },
       { 'data': 'composite_name' },
@@ -70,12 +74,31 @@ function refreshSearchTable() {
           return '<div> <a href="/hi"> <button class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </a> </div>';
         }
       }
-    ]
+    ], 
+    scrollY: "310px",
+    scrollCollapse: true
   });
 }
 
+function openTable(evt, tableName) {
+  var i, tabcontent, tablinks;
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
 
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
 
-function deleteEntry(){
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(tableName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+function deleteEntry() {
   // Ajax call to delete entry
 }
