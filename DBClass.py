@@ -1,5 +1,7 @@
 import sqlite3
 
+from sqlalchemy import null
+
 
 class DBClass():
     def __init__(self):
@@ -8,9 +10,11 @@ class DBClass():
         self.area_id = 0
         self.composite_id = 0
         new_area = self.access_most_recent_area()
+        print("New area: ", new_area)
         if new_area != 0:
             self.area_id = new_area[0] + 1
         new_composite = self.access_most_recent_composite()
+        print("New composite: ", new_composite)
         if new_composite != 0:
             self.composite_id = new_composite[0] + 1
             self.save_composite_to_db("temp")

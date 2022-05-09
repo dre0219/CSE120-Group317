@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, render_template, url_for, current_app
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from DBClass import DBClass
-
+import time
 
 app = Flask(__name__)
 dbc = DBClass()
@@ -70,7 +70,9 @@ def tables():
     Returns:
         dict/json: Returns the data from shape_querying as a readable json file
     """
+    start = time.time()
     data_to_send = dbc.composite_logic()
+    print("Time to populate table = ", str(time.time() - start))
     return {"data": data_to_send}
 
 
