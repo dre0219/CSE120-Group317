@@ -1,11 +1,116 @@
 #map {
-    height: 100%;
-  }
+  height: 500px;
+  width: 100%;
+}
 
-html,
 body {
     height: 100%;
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+}
+
+h1 {
+  color: #4a6762;
+  font-size: 42px;
+  float: left;
+  margin-left: 10px;
+}
+
+/* Add a white background color to the top navigation */
+.topnav {
+  background-color: white;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: right;
+  color: #4a6762;
+  text-align: center;
+  padding: 10px 12px;
+  margin-top: 26px;
+  margin-right: 20px;
+  margin-bottom: 32px; /* Change this if info does not appear properly on left */
+  text-decoration: none;
+  font-size: 24px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  color: #cda862;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  color: #4a6762;
+}
+
+.topnav a.active:hover {
+  color: #cda862;
+}
+
+.material-icons {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 36px;
+}
+
+.material-icons.small {
+  font-size: 20px;
+}
+
+.button {
+  border: none;
+  background-color: #4a6762;
+  color: white;
+  padding: 8px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 6px 4px;
+  cursor: pointer;
+}
+
+.button.small {
+  padding: 2px 6px;
+  margin: 0px;
+}
+
+.button:hover {
+  color: #cda862;
+}
+
+.button-text {
+  vertical-align: middle;
+}
+
+.table-caption {
+  position: relative;
+  left: 45%;
+  font-size: 30px;
+}
+
+/* Styling for info section */
+.info {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.info img {
+  padding: 10px;
+}
+
+.info p {
+  display: block;
+  padding: 10px;
+}
+
+/* Changed new line width */
+.info br {
+  content: "";
+  display: block;
+  margin-bottom: 1px;
 }
