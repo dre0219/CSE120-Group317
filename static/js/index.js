@@ -13,6 +13,16 @@ function initMap(){
     if (selectedShape) {
       selectedShape.setEditable(false);
       selectedShape = null;
+    
+      $.ajax({
+        type: 'POST',
+        url: "/selection",
+        data: {
+        'testcoordNE': 'False',
+        'testcoordSW': 'False'
+        },
+      })
+      
     }
   }
 
@@ -21,6 +31,22 @@ function initMap(){
     clearSelection();
     selectedShape = shape;
     shape.setEditable(true);
+
+    var bounds = newshape.getBounds();
+    var start = bounds.getNorthEast();
+    var end = bounds.getSouthWest();
+
+    const testcoordNE = start.toJSON(); 
+    const testcoordSW = end.toJSON();
+    
+    $.ajax({
+      type: 'POST',
+      url: "/selection",
+      data: {
+      'testcoordNE': testcoordNE,
+      'testcoordSW': testcoordSW
+      },
+    })
 
   }
 
@@ -58,6 +84,15 @@ function initMap(){
     // markers, lines, and shapes.
     drawingManager = new google.maps.drawing.DrawingManager({
       drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
+      markerOptions: {
+        draggable: true
+      },
+      polylineOptions: {
+        editable: true
+      },
+      rectangleOptions: polyOptions,
+      circleOptions: polyOptions,
+      polygonOptions: polyOptions,
       map: map
     });
 

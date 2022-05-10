@@ -1,15 +1,18 @@
+from cgi import test
 import sqlite3
 
 class DBClass():
     def __init__(self):
         self.coordinates = []
         self.coordinate_array=[]
+        self.current_selection=[]   # most recently recent selection
         
         self.area_id = self.access_most_recent_area()[0]
         self.composite_id = self.access_most_recent_composite()[0]
         self.area_id = 0
         self.composite_id = 0
         new_area = self.access_most_recent_area()
+        
         if new_area != 0:
             self.area_id = new_area[0]
         new_composite = self.access_most_recent_composite()
@@ -17,13 +20,37 @@ class DBClass():
             self.composite_id = new_composite[0]
         #print(str(self.area_id) + " " + str(self.composite_id))
     
+    
     def disp_internal(self):
+        """Displays all the internal varialbes
+        """
         print("coordinates: ", self.coordinates)
         print("coordinates Array: ", self.coordinate_array)
         print("Area ID: ", self.area_id)
         print("Composite_ID: ", self.composite_id)
+        print("current selection: ", self.current_selection)
         
         
+    def assign_current_selection(self, selection_coord):
+        """Takes an input of coordinates to assign it to self.current_selection to keep track of which box user has selected
+
+        Args:
+            selection_coord (_type_): _description_
+        """
+        if selection_coord['testcoordNE'] != 'False':
+            latitude1 = selection_coord['testcoordNE[lat]']    #assign to latitude1
+            longitude1 = selection_coord['testcoordNE[lng]']   #assign to longitude1
+            latitude2 = selection_coord['testcoordSW[lat]']    #assign to latitude2
+            longitude2 = selection_coord['testcoordSW[lng]']   #assign to longitude2
+            
+            self.current_selection = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
+            
+        else: 
+            self.clear_current_selection()
+    
+    def clear_current_selection(self):
+        self.current_selection = []
+    
     def get_db_connect(self):
         """ Attempts to create a connection to the database
 
