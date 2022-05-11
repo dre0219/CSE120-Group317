@@ -1,6 +1,6 @@
 import sqlite3
 from sqlalchemy import null
-
+from math import isclose
 
 from sqlalchemy import null
 
@@ -8,7 +8,7 @@ from sqlalchemy import null
 class DBClass():
     def __init__(self):
         self.coordinates = []
-        self.coordinate_array = []
+        self.coordinate_array = []      #[{"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2},  ....]
         self.area_id = 0
         self.composite_id = 0
         new_area = self.access_most_recent_area()
@@ -60,6 +60,7 @@ class DBClass():
         Returns:
             list: list of data to be displayed on datatable
         """
+        print(self.coordinate_array)
         data_to_send = []
         for i in self.coordinate_array:
             datas = self.shape_querying(i)
@@ -112,9 +113,34 @@ class DBClass():
                         AND composite_id = ?;
                         ''', (latitude1, longitude1, latitude2, longitude2, self.composite_id))
         connection.commit()
+        coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
+        
+        coord_array_holder = self.coordinate_array
+        
+        print(coordinates)
+        for i in range(0, len(coord_array_holder)):
+            print(self.dict_compare(coord_array_holder[i], coordinates))
+            if self.dict_compare(coord_array_holder[i], coordinates):
+                print(i)
+                coord_array_holder.pop(i)
+                break
+        
+        self.coordinate_array = coord_array_holder
         return ""
 
+    def dict_compare(self, dict1, dict2):
+        print(dict1)
+        dict1_val =  [float(i)for i in list(dict1.values())] 
+        dict2_val = [float(i)for i in list(dict2.values())] 
+        print(dict1_val, dict2_val)
 
+        for i in range(0, len(dict1_val)):
+            if isclose(dict1_val[i], dict2_val[i], rel_tol=0.1) == False:
+                return False
+            else:
+                return True
+            
+            
     def access_most_recent_composite(self):
         print("most recent composite")
         connection = self.get_db_connect()

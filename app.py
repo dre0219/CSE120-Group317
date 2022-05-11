@@ -13,6 +13,8 @@ dbc = DBClass()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    global dbc
+    dbc =DBClass()
     return render_template('index 3.html')
 
 
@@ -53,12 +55,14 @@ def load_areas_from_db(id):
     return dbc.load_areas_from_composite()
 
 
-@app.route('/delete', methods=['POST'])
+@app.route('/delete', methods=['DELETE'])
 def delete_areas_from_db():
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         data1=  request.form.to_dict()
+        print(data1)
         dbc.delete_area_from_db_coords(data1)
-    return 'completed'
+    return "complete"
+        
 
 @app.route('/deleteallshapes', methods=['DELETE'])
 def delete_all_shapes():

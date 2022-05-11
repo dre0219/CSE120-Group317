@@ -17,10 +17,11 @@ dbc = DBClass()
 
 def main():
     print("test")
-    print(dbc.load_areas_from_composite(0))
-    dbc.delete_area_from_db(7)
-    print(dbc.load_areas_from_composite(0))
+    # print(dbc.load_areas_from_composite(0))
+    # dbc.delete_area_from_db(7)
+    # print(dbc.load_areas_from_composite(0))
     dbc.disp_internal()
+    dbc.delete_area_from_db_coords(1)
     # dbc.save_composite_to_db(1, "Test.py search")
     # print("Loading composite 1's stuff before insert " + str(dbc.load_areas_from_composite(1)))
     # dict = {'testcoordNE[lat]': '37.8', 'testcoordNE[lng]': '-122.8', 'testcoordSW[lat]': '37.0', 'testcoordSW[lng]': '-122.0'}

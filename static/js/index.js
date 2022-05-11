@@ -12,17 +12,7 @@ function initMap(){
   function clearSelection() {
     if (selectedShape) {
       selectedShape.setEditable(false);
-      selectedShape = null;
-    
-      $.ajax({
-        type: 'POST',
-        url: "/selection",
-        data: {
-        'testcoordNE': 'False',
-        'testcoordSW': 'False'
-        },
-      })
-      
+      selectedShape = null;      
     }
   }
 
@@ -31,13 +21,6 @@ function initMap(){
     clearSelection();
     selectedShape = shape;
     shape.setEditable(true);
-
-    var bounds = selectedShape.getBounds();
-    var start = bounds.getNorthEast();
-    var end = bounds.getSouthWest();
-
-    const testcoordNE = start.toJSON(); 
-    const testcoordSW = end.toJSON();
 
   }
 
@@ -54,7 +37,7 @@ function initMap(){
       const testcoordSW = end.toJSON();
       
       $.ajax({
-        type: 'POST',
+        type: 'DELETE',
         url: "/delete",
         data: {
           'testcoordNE': testcoordNE,
