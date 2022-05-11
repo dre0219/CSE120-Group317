@@ -7,8 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 from DBClass import DBClass 
 
 
-
-
 app = Flask(__name__)
 dbc = DBClass()
 

@@ -1,15 +1,3 @@
-#map {
-  height: 500px;
-  width: 100%;
-}
-
-body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-}
-
 h1 {
   color: #4a6762;
   font-size: 42px;
@@ -31,7 +19,8 @@ h1 {
   padding: 10px 12px;
   margin-top: 26px;
   margin-right: 20px;
-  margin-bottom: 32px; /* Change this if info does not appear properly on left */
+  margin-bottom: 32px;
+  /* Change this if info does not appear properly on left */
   text-decoration: none;
   font-size: 24px;
 }
@@ -50,6 +39,101 @@ h1 {
   color: #cda862;
 }
 
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #4a6762;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  color: white;
+  background-color: #4a6762;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 16px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  color: #cda862;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  color: white;
+  background-color: #6d8682;
+}
+
+.tab button.active:hover {
+  color: #cda862;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  
+}
+
+/* Container made so map and DataTables able to be put side by side*/
+.float-container {
+  padding: 0px;
+}
+
+/*Left for map */
+.float-child1 {
+  margin:0;
+  width: 49.5%;
+  float: left;
+}
+
+/* Right for DataTables */
+.float-child2 {
+  margin:0;
+  border: 1px solid #ccc;
+  border-top: none;
+  width: 50%;
+  float: right;
+  height: 500px;
+}
+
+#map {
+  height: 500px;
+}
+
+#datas {
+  height: 310px;
+}
+#searches {
+  height: 310px;
+}
+/*Change padding of DataTable buttons for page numbers*/
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 0.5em 0.2em !important
+}
+
+.table-caption {
+  position: relative;
+  left: 35%;
+  color: #4a6762;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
 .material-icons {
   display: inline-block;
   vertical-align: middle;
@@ -64,12 +148,12 @@ h1 {
   border: none;
   background-color: #4a6762;
   color: white;
-  padding: 8px 10px;
+  padding: 8px 8px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 6px 4px;
+  margin: 6px 2px;
   cursor: pointer;
 }
 
@@ -86,10 +170,26 @@ h1 {
   vertical-align: middle;
 }
 
-.table-caption {
-  position: relative;
-  left: 45%;
-  font-size: 30px;
+.fbutton {
+  display: inline-block;
+  padding: 1px 0px;
+}
+
+label[for="name"] {
+  display: inline-block;
+  color: #4a6762;
+  font-size: 16px;
+  font-weight: bold;
+  padding-top: 10px;
+}
+
+input[type="text"] {
+  width: 25%;
+  padding: 10px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 /* Styling for info section */

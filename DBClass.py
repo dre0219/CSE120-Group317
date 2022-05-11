@@ -1,86 +1,57 @@
-from cgi import test
 import sqlite3
+from sqlalchemy import null
+
 
 class DBClass():
     def __init__(self):
         self.coordinates = []
-        self.coordinate_array=[]
-        self.current_selection=[]   # most recently recent selection
-        
-        self.area_id = self.access_most_recent_area()[0]
-        self.composite_id = self.access_most_recent_composite()[0]
+        self.coordinate_array = []
         self.area_id = 0
         self.composite_id = 0
         new_area = self.access_most_recent_area()
-        
+        print("New area: ", new_area)
         if new_area != 0:
-            self.area_id = new_area[0]
+            self.area_id = new_area[0] + 1
         new_composite = self.access_most_recent_composite()
+        print("New composite: ", new_composite)
         if new_composite != 0:
-            self.composite_id = new_composite[0]
+            self.composite_id = new_composite[0] + 1
+            self.save_composite_to_db("temp")
+        else:
+            self.save_composite_to_db("temp")
         #print(str(self.area_id) + " " + str(self.composite_id))
-    
-    
     def disp_internal(self):
-        """Displays all the internal varialbes
-        """
         print("coordinates: ", self.coordinates)
         print("coordinates Array: ", self.coordinate_array)
         print("Area ID: ", self.area_id)
         print("Composite_ID: ", self.composite_id)
-        print("current selection: ", self.current_selection)
         
         
-    def assign_current_selection(self, selection_coord):
-        """Takes an input of coordinates to assign it to self.current_selection to keep track of which box user has selected
-
-        Args:
-            selection_coord (_type_): _description_
-        """
-        if selection_coord['testcoordNE'] != 'False':
-            latitude1 = selection_coord['testcoordNE[lat]']    #assign to latitude1
-            longitude1 = selection_coord['testcoordNE[lng]']   #assign to longitude1
-            latitude2 = selection_coord['testcoordSW[lat]']    #assign to latitude2
-            longitude2 = selection_coord['testcoordSW[lng]']   #assign to longitude2
-            
-            self.current_selection = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
-            
-        else: 
-            self.clear_current_selection()
-    
-    def clear_current_selection(self):
-        self.current_selection = []
-    
     def get_db_connect(self):
         """ Attempts to create a connection to the database
-
         Returns:
             sqlite3 connection: returns the sqlite connection or none if error
         """
         connection = None
         try:
-            connection = sqlite3.connect("sf_food_program_db_project_ver.sqlite")
+            connection = sqlite3.connect(
+                "sf_food_program_db_project_ver.sqlite")
         except sqlite3.error as e:
             print(e)
         return connection
-    
-    
+
     def dict_factory(self, cursor, row):
         """ Converts row_factory function to output dictionaries instead of tuples
-
         Args:
             cursor (_type_):s Database Cursor
             row (_type_): Row of database
-
         Returns:
             dict: returns a dictionary of values with column names as keys
         """
         return dict((cursor.description[idx][0], value) for idx, value in enumerate(row))
-    
-    
+
     def composite_logic(self):
         """ Logic function that uses the shape_querying function to find POI in composite areas
-
         Returns:
             list: list of data to be displayed on datatable
         """
@@ -96,33 +67,57 @@ class DBClass():
 
         data_to_send = []
 
-
+    def save_area_to_temp(self, data):
+        latitude1 = data['testcoordNE[lat]']    #assign to latitude1
+        longitude1 = data['testcoordNE[lng]']   #assign to longitude1
+        latitude2 = data['testcoordSW[lat]']    #assign to latitude2
+        longitude2 = data['testcoordSW[lng]']   #assign to longitude2
+        coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
+        self.coordinate_array.append(coordinates)
     
-    def save_area_to_db(self, data2):
+    
+    def save_area_to_db(self, data):
         print("saving to db")
         connection = self.get_db_connect()
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
-        latitude1 = data2['testcoordNE[lat]']    #assign to latitude1
-        longitude1 = data2['testcoordNE[lng]']   #assign to longitude1
-        latitude2 = data2['testcoordSW[lat]']    #assign to latitude2
-        longitude2 = data2['testcoordSW[lng]']   #assign to longitude2
-        composite_id = 0
+        latitude1 = data['testcoordNE[lat]']    #assign to latitude1
+        longitude1 = data['testcoordNE[lng]']   #assign to longitude1
+        latitude2 = data['testcoordSW[lat]']    #assign to latitude2
+        longitude2 = data['testcoordSW[lng]']   #assign to longitude2
         self.area_id += 1
         cursor.execute('''INSERT INTO areas(area_id, latitude1, longitude1, latitude2, longitude2, composite_id) VALUES(?,?,?,?,?,?)
-                        ''', (self.area_id, latitude1, longitude1, latitude2, longitude2, composite_id))
+                        ''', (self.area_id, latitude1, longitude1, latitude2, longitude2, self.composite_id))
         connection.commit()
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         self.coordinate_array.append(coordinates)
         return ""
+
     
-    
+    def delete_area_from_db_coords(self, data):
+        print("saving to db")
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute('''pragma foreign_keys = ON''')
+        connection.commit()
+        latitude1 = data['testcoordNE[lat]']    #assign to latitude1
+        longitude1 = data['testcoordNE[lng]']   #assign to longitude1
+        latitude2 = data['testcoordSW[lat]']    #assign to latitude2
+        longitude2 = data['testcoordSW[lng]']   #assign to longitude2
+        cursor.execute('''DELETE FROM areas WHERE latitude1 LIKE ? AND longitude1 LIKE ? AND latitude2 LIKE ? AND longitude2 LIKE ? 
+                        AND composite_id = ?;
+                        ''', (latitude1, longitude1, latitude2, longitude2, self.composite_id))
+        connection.commit()
+        return ""
+
+
     def access_most_recent_composite(self):
         print("most recent composite")
         connection = self.get_db_connect()
         cursor = connection.cursor()
-        cursor.execute('''SELECT * FROM composites WHERE composite_id = (SELECT MAX(composite_id) FROM composites)''')
+        cursor.execute(
+            '''SELECT * FROM composites WHERE composite_id = (SELECT MAX(composite_id) FROM composites)''')
         composites = cursor.fetchone()
         if composites == None:
             print("No searches yet")
@@ -135,9 +130,10 @@ class DBClass():
         print("most recent area")
         connection = self.get_db_connect()
         cursor = connection.cursor()
-        cursor.execute('''SELECT * FROM areas WHERE area_id = (SELECT MAX(area_id) FROM areas)''')
+        cursor.execute(
+            '''SELECT * FROM areas WHERE area_id = (SELECT MAX(area_id) FROM areas)''')
         area = cursor.fetchone()
-        # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5]) 
+        # area = dict(area_id = row[0], lat1 = row[1], long1 = row[2], lat2 = row[3], long2 = row[4], composite_id = row[5])
         print(area)
         if area == None:
             print("No areas yet")
@@ -200,6 +196,19 @@ class DBClass():
         connection.commit()
 
         
+    def rename_composite_to_db(self, name):
+        print("really renaming/updating name to db")
+        connection = self.get_db_connect()
+        cursor = connection.cursor()
+        cursor.execute('''pragma foreign_keys = ON''')
+        connection.commit()
+        cursor.execute('''UPDATE composites SET composite_name = ? WHERE (composite_id = ? AND user_id = ?)
+                        ''', (name, self.composite_id, 0))
+        self.composite_id += 1
+        connection.commit()
+        self.save_composite_to_db("temp")
+        return ""
+
     def save_composite_to_db(self, name):
         print("saving to db")
         connection = self.get_db_connect()
@@ -208,10 +217,8 @@ class DBClass():
         connection.commit()
         cursor.execute('''INSERT INTO composites(composite_id, composite_name, user_id) VALUES(?,?,?)
                         ''', (self.composite_id, name, 0))
-        self.composite_id += 1
         connection.commit()
-        return ""    
-
+        return ""
 
     def shape_querying(self, latestcoords):
         connection = self.get_db_connect()
@@ -222,14 +229,13 @@ class DBClass():
         SELECT *
         FROM businesses
         WHERE latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?
-        ''', (latestcoords["lat1"],latestcoords["lat2"], latestcoords["long2"], latestcoords["long1"]))
+        ''', (latestcoords["lat1"], latestcoords["lat2"], latestcoords["long2"], latestcoords["long1"]))
 
-        # # latitude of rectangle is less than the top left y (latitude decreases southward from positive value in northern hemisphere), 
+        # # latitude of rectangle is less than the top left y (latitude decreases southward from positive value in northern hemisphere),
         # # and greater than bottom right's y (going northwards increases latitude)
         # # longitude of rectangle is less than the bottom right's x (longitude increases eastward from negative value in western hemisphere)
         # # and greater than top left's x (longitude decreases westward in western hemisphere)
 
-        
         output_data = cursor.fetchall()
         print(">>>>>> Shape Querying Functions")
         return output_data
