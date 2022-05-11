@@ -63,6 +63,10 @@ function initMap(){
       all_overlays[i].overlay.setMap(null);
     }
     all_overlays = [];
+    $.ajax({
+      type: 'DELETE',
+      url: "/deleteallshapes",
+    })
   }
 
   
@@ -115,6 +119,8 @@ function initMap(){
 
         const testcoordNE = start.toJSON(); 
         const testcoordSW = end.toJSON();
+        
+        start = new Date().getTime();
 
         $.ajax({
           type: 'POST',
@@ -123,8 +129,38 @@ function initMap(){
           //'data': JSON.stringify(data),
           'testcoordNE': testcoordNE,
           'testcoordSW': testcoordSW
-          },
+          }
         })
+
+        //Test code
+        /*for(var i = 0; i < 100; i++){
+          if(i < 99){
+            $.ajax({
+              type: 'POST',
+              url: "/save",
+              data: {
+              //'data': JSON.stringify(data),
+              'testcoordNE': testcoordNE,
+              'testcoordSW': testcoordSW
+              }
+            })
+          }
+          else{
+            $.ajax({
+              type: 'POST',
+              url: "/save",
+              data: {
+              //'data': JSON.stringify(data),
+              'testcoordNE': testcoordNE,
+              'testcoordSW': testcoordSW
+              },
+              complete: function(data) {
+                console.log('100 ajax calls completed in ' +(new Date().getTime()-start)+ ' ms');
+              }
+            })
+          }
+        }*/
+       
         google.maps.event.addListener(newShape, 'click', function() {
           setSelection(newShape);
         });

@@ -2,6 +2,9 @@ import sqlite3
 from sqlalchemy import null
 
 
+from sqlalchemy import null
+
+
 class DBClass():
     def __init__(self):
         self.coordinates = []
@@ -75,7 +78,10 @@ class DBClass():
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         self.coordinate_array.append(coordinates)
     
+<<<<<<< HEAD
     
+=======
+>>>>>>> 3050183a592c6febbb68b9daa00185b212b185c9
     def save_area_to_db(self, data):
         print("saving to db")
         connection = self.get_db_connect()
@@ -94,7 +100,10 @@ class DBClass():
         self.coordinate_array.append(coordinates)
         return ""
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> 3050183a592c6febbb68b9daa00185b212b185c9
     def delete_area_from_db_coords(self, data):
         print("saving to db")
         connection = self.get_db_connect()
