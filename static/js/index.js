@@ -32,27 +32,37 @@ function initMap(){
     selectedShape = shape;
     shape.setEditable(true);
 
-    var bounds = newshape.getBounds();
+    var bounds = selectedShape.getBounds();
     var start = bounds.getNorthEast();
     var end = bounds.getSouthWest();
 
     const testcoordNE = start.toJSON(); 
     const testcoordSW = end.toJSON();
-    
-    $.ajax({
-      type: 'POST',
-      url: "/selection",
-      data: {
-      'testcoordNE': testcoordNE,
-      'testcoordSW': testcoordSW
-      },
-    })
 
   }
 
 
   function deleteSelectedShape() {
     if (selectedShape) {
+      selectedShape.setEditable(true);
+  
+      var bounds = selectedShape.getBounds();
+      var start = bounds.getNorthEast();
+      var end = bounds.getSouthWest();
+  
+      const testcoordNE = start.toJSON(); 
+      const testcoordSW = end.toJSON();
+      
+      $.ajax({
+        type: 'POST',
+        url: "/delete",
+        data: {
+          'testcoordNE': testcoordNE,
+          'testcoordSW': testcoordSW
+          },
+      }
+      )
+
       selectedShape.setMap(null);
     }
   }
@@ -131,35 +141,6 @@ function initMap(){
           'testcoordSW': testcoordSW
           }
         })
-
-        //Test code
-        /*for(var i = 0; i < 100; i++){
-          if(i < 99){
-            $.ajax({
-              type: 'POST',
-              url: "/save",
-              data: {
-              //'data': JSON.stringify(data),
-              'testcoordNE': testcoordNE,
-              'testcoordSW': testcoordSW
-              }
-            })
-          }
-          else{
-            $.ajax({
-              type: 'POST',
-              url: "/save",
-              data: {
-              //'data': JSON.stringify(data),
-              'testcoordNE': testcoordNE,
-              'testcoordSW': testcoordSW
-              },
-              complete: function(data) {
-                console.log('100 ajax calls completed in ' +(new Date().getTime()-start)+ ' ms');
-              }
-            })
-          }
-        }*/
        
         google.maps.event.addListener(newShape, 'click', function() {
           setSelection(newShape);
@@ -477,13 +458,6 @@ var checkbox_select = function(params)
     google.maps.event.addDomListener(document.getElementById('delete-all-button'), 'click', deleteAllShape);
 
   };
-
-
-  // Listen for click and add marker 
-  google.maps.event.addListener(map, 'click', function(event){
-  // Add marker
-  addMarker({coords:event.latLng});
-  });
   
 
   // Store map coordinates for polygons

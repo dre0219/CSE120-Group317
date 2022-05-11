@@ -23,6 +23,8 @@ class DBClass():
         else:
             self.save_composite_to_db("temp")
         #print(str(self.area_id) + " " + str(self.composite_id))
+    
+    
     def disp_internal(self):
         print("coordinates: ", self.coordinates)
         print("coordinates Array: ", self.coordinate_array)
@@ -78,10 +80,6 @@ class DBClass():
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         self.coordinate_array.append(coordinates)
     
-<<<<<<< HEAD
-    
-=======
->>>>>>> 3050183a592c6febbb68b9daa00185b212b185c9
     def save_area_to_db(self, data):
         print("saving to db")
         connection = self.get_db_connect()
@@ -100,12 +98,8 @@ class DBClass():
         self.coordinate_array.append(coordinates)
         return ""
 
-<<<<<<< HEAD
-    
-=======
->>>>>>> 3050183a592c6febbb68b9daa00185b212b185c9
     def delete_area_from_db_coords(self, data):
-        print("saving to db")
+        print("deleting from coords")
         connection = self.get_db_connect()
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
@@ -153,18 +147,20 @@ class DBClass():
     
     def load_areas_from_composite(self, composite_id):
         connection = self.get_db_connect()
+        connection.row_factory = self.dict_factory
         cursor = connection.cursor()
         cursor.execute('''pragma foreign_keys = ON''')
         connection.commit()
         cursor.execute('''SELECT * FROM areas WHERE composite_id = ?''', (composite_id,))
         output_data = cursor.fetchall()
-        print(output_data)
-        
+
         self.coordinate_array=[]
         for coordinate in output_data: 
              coordinates_to_array = {"lat1": coordinate[1], "long1": coordinate[2], "lat2": coordinate[3], "long2":coordinate[4]}
              self.coordinate_array.append(coordinates_to_array)
              
+        self.composite_logic()
+
         return output_data
 
 
@@ -176,8 +172,6 @@ class DBClass():
         connection.commit()
         cursor.execute('''SELECT * FROM composites WHERE user_id = ?''', (user_id,))
         output_data = cursor.fetchall()
-        print(output_data)
-
         return output_data
 
 

@@ -13,6 +13,8 @@ $(document).ready(function () {
     scrollY: "310px",
     scrollCollapse: true
   });
+
+
   searchtable = $('#searches').DataTable({
     ajax: {
       type: 'GET',
@@ -28,7 +30,7 @@ $(document).ready(function () {
         'data': null,
         orderable: false,
         "render": function (data, type, full) {
-          return '<div> <a href="/hi"> <button class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </a> </div>';
+          return '<div> <a href="/load> <button class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </a> </div>';
         }
       }
     ], 
@@ -36,6 +38,7 @@ $(document).ready(function () {
     scrollCollapse: true
   });
 });
+
 
 function refreshTable() {
   resulttable.destroy();
@@ -54,6 +57,7 @@ function refreshTable() {
   });
 }
 
+
 function refreshSearchTable() {
   searchtable.destroy();
   searchtable = $('#searches').DataTable({
@@ -71,7 +75,7 @@ function refreshSearchTable() {
         'data': null,
         orderable: false,
         "render": function (data, type, full) { // return string is html format
-          return '<div> <a href="/hi"> <button class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </a> </div>';
+          return '<div> <a href="/load"> <button class="button small"> <i class="material-icons small">file_upload</i> <span class="button-text"> Load </span> </button> </a> </div>';
         }
       }
     ], 
