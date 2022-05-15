@@ -19,9 +19,9 @@ class DBClass():
         print("New composite: ", new_composite)
         if new_composite != 0:
             self.composite_id = new_composite[0] + 1
-            self.save_composite_to_db("temp")
+            self.save_composite_to_db("Current Search")
         else:
-            self.save_composite_to_db("temp")
+            self.save_composite_to_db("Current Search")
         #print(str(self.area_id) + " " + str(self.composite_id))
     
     
@@ -69,11 +69,13 @@ class DBClass():
                     data_to_send.append(datas[j])
         return data_to_send
     
-    def search_placement(self):
-
-        data_to_send = []
-
+    
     def save_area_to_temp(self, data):
+        """ Takes the data coordinate received and resturctures them and then stores them into the temporary storage self.coodinate_array.
+
+        Args:
+            data (JSON/Dictionary): Rectangle area coordinates 
+        """
         latitude1 = data['testcoordNE[lat]']    #assign to latitude1
         longitude1 = data['testcoordNE[lng]']   #assign to longitude1
         latitude2 = data['testcoordSW[lat]']    #assign to latitude2
@@ -81,7 +83,16 @@ class DBClass():
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         self.coordinate_array.append(coordinates)
     
+    
     def save_area_to_db(self, data):
+        """ Takes the coodrinate data and saves them to the database. It also stores the coodinates into the temporary storage self.coodinate_array.
+ 
+        Args:
+            data (JSON/Dictionary):  Rectangle area coordinates 
+
+        Returns:
+            String: Lets the user know that it has been saved.
+        """
         print("saving to db")
         connection = self.get_db_connect()
         cursor = connection.cursor()
@@ -97,7 +108,8 @@ class DBClass():
         connection.commit()
         coordinates = {"lat1": latitude1, "long1": longitude1, "lat2": latitude2, "long2":longitude2}
         self.coordinate_array.append(coordinates)
-        return ""
+        return "Saved Successfully"
+    
 
     def delete_area_from_db_coords(self, data):
         print("deleting from coords")
@@ -235,7 +247,7 @@ class DBClass():
                         ''', (name, self.composite_id, 0))
         self.composite_id += 1
         connection.commit()
-        self.save_composite_to_db("temp")
+        self.save_composite_to_db("Current Search")
         return ""
 
     def save_composite_to_db(self, name):
@@ -260,10 +272,8 @@ class DBClass():
         WHERE latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?
         ''', (latestcoords["lat1"], latestcoords["lat2"], latestcoords["long2"], latestcoords["long1"]))
 
-        # # latitude of rectangle is less than the top left y (latitude decreases southward from positive value in northern hemisphere),
-        # # and greater than bottom right's y (going northwards increases latitude)
-        # # longitude of rectangle is less than the bottom right's x (longitude increases eastward from negative value in western hemisphere)
-        # # and greater than top left's x (longitude decreases westward in western hemisphere)
+        # # latitude of rectangle is less than the northeastern latitude and greater than southwestern latitude
+        # # longitude of rectangle is greater than the southwestern and and less than northeastern longitude
 
         output_data = cursor.fetchall()
         print(">>>>>> Shape Querying Functions")

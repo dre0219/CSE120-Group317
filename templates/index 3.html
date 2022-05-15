@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Veracruz Ventures Mapper</title>
+  <title>Veracoders Mapper</title>
 
   <link rel="stylesheet" type="text/css" href="static/css/main.css">
 </head>
 
 <body>
-  <h1>Veracruz Ventures Mapper</h1>
+  <h1>Veracoders Mapper</h1>
 
   <div class="topnav"><a href="/contact">Contact Us</a> <a class="active" href="/">Map</a> </div>
 
@@ -27,10 +27,10 @@
     <div class="float-child2">
       <div class="tab">
         <button class="tablinks active" onclick="openTable(event,'search')">Search Results</button>
-        <button class="tablinks" onclick="openTable(event,'saved'); refreshSearchTable()">Saved Searches</button>
+        <button class="tablinks" onclick="openTable(event,'saved'); refreshSearchTable()">Saved Composites</button>
       </div>
       <div id="search" class="tabcontent" style="display:block">
-        <caption><span class="table-caption">Search Results</span></caption>
+        <caption><span class="table-caption">Results</span></caption>
         <table id="datas" class="cell-border compact stripe hover">
           <thead>
             <tr>
@@ -43,15 +43,15 @@
         </table>
         <button onclick="refreshTable()" class="button" style="position:relative; left:-15px; top:4px;"> <i
             class="material-icons">refresh</i>
-          <span class="button-text">Refresh Search Results</span> </button>
+          <span class="button-text">Refresh Results</span> </button>
       </div>
       <div id="saved" class="tabcontent">
-        <caption><span class="table-caption">Saved Searches</span></caption>
+        <caption><span class="table-caption">Saved Composites</span></caption>
         <table id="searches" class="cell-border compact stripe hover">
           <thead>
             <tr>
-              <th>Search ID</th>
-              <th>Search Name</th>
+              <th>Composite ID</th>
+              <th>Composite Name</th>
               <th>User ID</th>
               <th></th>
             </tr>
@@ -61,7 +61,7 @@
         </table>
         <button onclick="refreshSearchTable()" class="button" style="position:relative; left:-15px; top:4px;"> <i
             class="material-icons">refresh</i>
-          <span class="button-text">Refresh Saved Searches</span> </button>
+          <span class="button-text">Refresh Saved Composite Areas</span> </button>
       </div>
 
 
@@ -70,7 +70,7 @@
         <input type="text" name="name" placeholder="Name of composite..">
         </input>
         <button type="submit" class="button"> <i class="material-icons">file_download</i>
-          <span class="button-text">Save to Searches Table</span> </button>
+          <span class="button-text">Save to Composites</span> </button>
       </form>
     </div>
   </div>

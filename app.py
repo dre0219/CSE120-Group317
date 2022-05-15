@@ -1,14 +1,8 @@
-from curses import tparm
-from operator import length_hint
-import sqlite3
 from flask import Flask, request, jsonify, render_template, url_for, current_app, g, redirect, flash
-from flask.cli import with_appcontext
-from flask_sqlalchemy import SQLAlchemy
 from DBClass import DBClass
 import time
 
 app = Flask(__name__)
-dbc = DBClass()
 
 
 @app.route('/', methods=['GET', 'POST'])

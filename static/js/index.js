@@ -88,8 +88,6 @@ function initMap(){
         editable: true
       },
       rectangleOptions: polyOptions,
-      circleOptions: polyOptions,
-      polygonOptions: polyOptions,
       map: map
     });
 
